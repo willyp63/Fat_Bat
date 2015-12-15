@@ -17,6 +17,9 @@
 
 #define TERMINAL_Y_VELOCITY 96.0
 
+#define BAT_X_OFFSET 64.0
+#define BAT_Y_OFFSET 64.0
+
 typedef enum gameState{
     IN_PROGRESS, GAME_OVER, LEVEL_COMPLETE
 }GameState;
@@ -24,7 +27,7 @@ typedef enum gameState{
 @interface GameModel : NSObject
 
 
--(id)initWithBatFrame:(CGRect)batFrame caveFrame:(CGRect)caveFrame filePath:(NSString *)filePath;
+-(id)initWithCaveFrame:(CGRect)caveFrame numberOfSubdivisions:(int)numDivisions filePath:(NSString *)filePath;
 
 -(void)update;
 
@@ -46,6 +49,8 @@ typedef enum gameState{
 @property NSMutableArray<GameObjectModel *> *stalagmite;
 
 @property CGRect caveFrame;
+
+@property CGFloat subDivisionSize;
 
 @property CGFloat finishLine;
 

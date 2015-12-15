@@ -9,12 +9,19 @@
 #import <UIKit/UIKit.h>
 
 #import "BatView.h"
-
 #import "GameModel.h"
 
 @interface GameViewController : UIViewController
 
+-(id)initWithLevelName:(NSString *)levelName;
+
+@property BOOL paused;
+
+@property NSString *levelName;
+
 @property UIButton *holdButton;
+@property UIButton *pauseButton;
+@property UIButton *quitButton;
 
 @property UIView *finishLineView;
 

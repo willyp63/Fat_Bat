@@ -10,22 +10,35 @@
 
 @implementation GameViewController
 
-static CGFloat BAT_X_OFFSET = 64.0;
-static CGFloat BAT_Y_OFFSET = 64.0;
-
-static CGFloat CAVE_BORDER_WIDTH = 4.0;
+static CGFloat UPDATE_TIME_INTERVAL = 0.2;
 
 static int NUMBER_OF_CAVE_DIVISIONS = 9;
 
+static CGFloat CAVE_BORDER_WIDTH = 4.0;
 static CGFloat CAVE_CEILING_HEIGHT = 10;
 static CGFloat CAVE_FLOOR_HEIGHT = 10;
 
-static CGFloat UPDATE_TIME_INTERVAL = 0.2;
+static CGFloat BUTTON_OFFSET = 20.0;
+static CGFloat BUTTON_WIDTH = 80.0;
+static CGFloat BUTTON_HEIGHT = 40.0;
+
+
+-(id)initWithLevelName:(NSString *)levelName{
+    self = [super init];
+    if (self) {
+        _levelName = levelName;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self startNewGame];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    self.navigationController.navigationBarHidden = YES;
 }
 
 -(void)startNewGame{
@@ -39,14 +52,16 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     //cave layer frame
     CGRect caveLayerFrame = CGRectMake(caveFrame.origin.x - CAVE_BORDER_WIDTH, caveFrame.origin.y, caveFrame.size.width + CAVE_BORDER_WIDTH*2, caveFrame.size.height);
     
-    //bat view frame
-    CGFloat batSize = caveFrame.size.height/NUMBER_OF_CAVE_DIVISIONS;
-    CGRect batFrame = CGRectMake(caveFrame.origin.x + BAT_X_OFFSET, caveFrame.origin.y + BAT_Y_OFFSET, batSize, batSize);
+    //pause button frame
+    CGRect pauseButtonFrame = CGRectMake(screenSize.width - BUTTON_WIDTH - BUTTON_OFFSET, BUTTON_OFFSET + statusBarHeight, BUTTON_WIDTH, BUTTON_HEIGHT);
+    
+    //quit button frame
+    CGRect quitButtonFrame = CGRectMake(BUTTON_OFFSET, BUTTON_OFFSET + statusBarHeight, BUTTON_WIDTH, BUTTON_HEIGHT);
     
     
     //init model
-    NSString *levelFilePath = [[NSBundle mainBundle] pathForResource:@"Level_1" ofType:@"txt"];
-    _model = [[GameModel alloc] initWithBatFrame:batFrame caveFrame:caveFrame filePath:levelFilePath];
+    NSString *levelFilePath = [[NSBundle mainBundle] pathForResource:_levelName ofType:@"txt"];
+    _model = [[GameModel alloc] initWithCaveFrame:caveFrame numberOfSubdivisions:NUMBER_OF_CAVE_DIVISIONS filePath:levelFilePath];
     
     
     //set root view background color
@@ -61,7 +76,7 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     [self.view.layer addSublayer:caveLayer];
     
     //create bat view and add to root view
-    _batView = [[BatView alloc] initWithFrame:batFrame];
+    _batView = [[BatView alloc] initWithFrame:_model.bat.frame];
     [self.view addSubview:_batView];
     
     //init finish line view and layer
@@ -74,12 +89,45 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     _stalagmiteViews = [[NSMutableArray alloc] initWithCapacity:_model.numStalagmite];
     
     
-    //init and add hold button
+    //init and add hold button to root view
     _holdButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _holdButton.frame = self.view.bounds;
     [_holdButton addTarget:self action:@selector(fingerDown) forControlEvents:UIControlEventTouchDown];
     [_holdButton addTarget:self action:@selector(fingerUp) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_holdButton];
+    
+    //init and add pause button to root view
+    _pauseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _pauseButton.frame = pauseButtonFrame;
+    _pauseButton.layer.borderWidth = 4.0;
+    _pauseButton.layer.borderColor = [UIColor blackColor].CGColor;
+    _pauseButton.layer.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0].CGColor;
+    [_pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:_pauseButton];
+    _paused = NO;
+    
+    //init and add label to pause button view
+    UILabel *pauseButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, pauseButtonFrame.size.width, pauseButtonFrame.size.height)];
+    pauseButtonLabel.text = @"pause";
+    pauseButtonLabel.textAlignment = NSTextAlignmentCenter;
+    pauseButtonLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0];
+    [_pauseButton addSubview:pauseButtonLabel];
+    
+    //init and add quit button to root view
+    _quitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _quitButton.frame = quitButtonFrame;
+    _quitButton.layer.borderWidth = 4.0;
+    _quitButton.layer.borderColor = [UIColor blackColor].CGColor;
+    _quitButton.layer.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0].CGColor;
+    [_quitButton addTarget:self action:@selector(quitGame) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:_quitButton];
+    
+    //init and add label to quit button view
+    UILabel *quitButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, quitButtonFrame.size.width, quitButtonFrame.size.height)];
+    quitButtonLabel.text = @"quit";
+    quitButtonLabel.textAlignment = NSTextAlignmentCenter;
+    quitButtonLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0];
+    [_quitButton addSubview:quitButtonLabel];
     
     
     //start update timer
@@ -96,6 +144,29 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     [_batView setIsDiving:NO];
 }
 
+-(void)pauseGame{
+    if (_paused) {
+        _paused = NO;
+        
+        _holdButton.backgroundColor = [UIColor clearColor];
+        
+        //start update timer
+        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
+    }else{
+        _paused = YES;
+        
+        _holdButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        
+        //stop update timer
+        [_updateTimer invalidate];
+    }
+}
+
+-(void)quitGame{
+    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)breakDownUI{
     [_updateTimer invalidate];
     for (UIView *view in self.view.subviews) {
@@ -109,10 +180,12 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     
     
     //check for game over
-    if (_model.state == GAME_OVER || _model.state == LEVEL_COMPLETE) {
+    if (_model.state == GAME_OVER) {
         [self breakDownUI];
         [self startNewGame];
         return;
+    }else if(_model.state == LEVEL_COMPLETE){
+        [self quitGame];
     }
     
     
@@ -141,8 +214,10 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
         [_stalagmiteViews addObject:stalagmiteView];
     }
     
-    //bring hold button in front of new views
+    //bring ui views in front of new views
     [self.view bringSubviewToFront:_holdButton];
+    [self.view bringSubviewToFront:_pauseButton];
+    [self.view bringSubviewToFront:_quitButton];
     
     
     //update model
@@ -198,8 +273,10 @@ static CGFloat UPDATE_TIME_INTERVAL = 0.2;
     //get elapsed time
     CFTimeInterval elapsedTime = CACurrentMediaTime() - startTime;
     
-    //start update timer
-    _updateTimer = [NSTimer scheduledTimerWithTimeInterval:(UPDATE_TIME_INTERVAL - elapsedTime) target:self selector:@selector(update) userInfo:Nil repeats:NO];
+    if (!_paused) {
+        //start update timer
+        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:(UPDATE_TIME_INTERVAL - elapsedTime) target:self selector:@selector(update) userInfo:Nil repeats:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
