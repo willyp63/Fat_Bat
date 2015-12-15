@@ -7,21 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		460569381C1DEDB100D60E0E /* GameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 460569371C1DEDB100D60E0E /* GameModel.m */; };
+		4605693B1C1DEF9000D60E0E /* GameObjectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4605693A1C1DEF9000D60E0E /* GameObjectModel.m */; };
+		4605693E1C1E058000D60E0E /* BatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4605693D1C1E058000D60E0E /* BatView.m */; };
+		460569401C1E1B2900D60E0E /* Level_2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4605693F1C1E1B2900D60E0E /* Level_2.txt */; };
+		460569451C1E706800D60E0E /* Level_1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 460569441C1E706800D60E0E /* Level_1.txt */; };
 		4674F6021C1CB04D00701996 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6011C1CB04D00701996 /* main.m */; };
 		4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6041C1CB04D00701996 /* AppDelegate.m */; };
-		4674F6081C1CB04D00701996 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6071C1CB04D00701996 /* ViewController.m */; };
+		4674F6081C1CB04D00701996 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6071C1CB04D00701996 /* GameViewController.m */; };
 		4674F60B1C1CB04D00701996 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4674F6091C1CB04D00701996 /* Main.storyboard */; };
 		4674F60D1C1CB04D00701996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4674F60C1C1CB04D00701996 /* Assets.xcassets */; };
 		4674F6101C1CB04D00701996 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4674F60E1C1CB04D00701996 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		460569361C1DEDB100D60E0E /* GameModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameModel.h; sourceTree = "<group>"; };
+		460569371C1DEDB100D60E0E /* GameModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameModel.m; sourceTree = "<group>"; };
+		460569391C1DEF9000D60E0E /* GameObjectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameObjectModel.h; sourceTree = "<group>"; };
+		4605693A1C1DEF9000D60E0E /* GameObjectModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameObjectModel.m; sourceTree = "<group>"; };
+		4605693C1C1E058000D60E0E /* BatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatView.h; sourceTree = "<group>"; };
+		4605693D1C1E058000D60E0E /* BatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatView.m; sourceTree = "<group>"; };
+		4605693F1C1E1B2900D60E0E /* Level_2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Level_2.txt; sourceTree = "<group>"; };
+		460569441C1E706800D60E0E /* Level_1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Level_1.txt; sourceTree = "<group>"; };
 		4674F5FD1C1CB04D00701996 /* Fat Bat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fat Bat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4674F6011C1CB04D00701996 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4674F6031C1CB04D00701996 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4674F6041C1CB04D00701996 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4674F6061C1CB04D00701996 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4674F6071C1CB04D00701996 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4674F6061C1CB04D00701996 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		4674F6071C1CB04D00701996 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		4674F60A1C1CB04D00701996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4674F60C1C1CB04D00701996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4674F60F1C1CB04D00701996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,13 +73,21 @@
 			children = (
 				4674F6031C1CB04D00701996 /* AppDelegate.h */,
 				4674F6041C1CB04D00701996 /* AppDelegate.m */,
-				4674F6061C1CB04D00701996 /* ViewController.h */,
-				4674F6071C1CB04D00701996 /* ViewController.m */,
+				4674F6061C1CB04D00701996 /* GameViewController.h */,
+				4674F6071C1CB04D00701996 /* GameViewController.m */,
+				4605693C1C1E058000D60E0E /* BatView.h */,
+				4605693D1C1E058000D60E0E /* BatView.m */,
+				460569361C1DEDB100D60E0E /* GameModel.h */,
+				460569371C1DEDB100D60E0E /* GameModel.m */,
+				460569391C1DEF9000D60E0E /* GameObjectModel.h */,
+				4605693A1C1DEF9000D60E0E /* GameObjectModel.m */,
 				4674F6091C1CB04D00701996 /* Main.storyboard */,
 				4674F60C1C1CB04D00701996 /* Assets.xcassets */,
 				4674F60E1C1CB04D00701996 /* LaunchScreen.storyboard */,
 				4674F6111C1CB04D00701996 /* Info.plist */,
 				4674F6001C1CB04D00701996 /* Supporting Files */,
+				4605693F1C1E1B2900D60E0E /* Level_2.txt */,
+				460569441C1E706800D60E0E /* Level_1.txt */,
 			);
 			path = "Fat Bat";
 			sourceTree = "<group>";
@@ -137,8 +158,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4674F6101C1CB04D00701996 /* LaunchScreen.storyboard in Resources */,
+				460569401C1E1B2900D60E0E /* Level_2.txt in Resources */,
 				4674F60D1C1CB04D00701996 /* Assets.xcassets in Resources */,
 				4674F60B1C1CB04D00701996 /* Main.storyboard in Resources */,
+				460569451C1E706800D60E0E /* Level_1.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,8 +172,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4674F6081C1CB04D00701996 /* ViewController.m in Sources */,
+				4674F6081C1CB04D00701996 /* GameViewController.m in Sources */,
+				460569381C1DEDB100D60E0E /* GameModel.m in Sources */,
 				4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */,
+				4605693B1C1DEF9000D60E0E /* GameObjectModel.m in Sources */,
+				4605693E1C1E058000D60E0E /* BatView.m in Sources */,
 				4674F6021C1CB04D00701996 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +324,7 @@
 				4674F6161C1CB04D00701996 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
