@@ -10,14 +10,13 @@
 
 @implementation GameModel
 
-
--(id)initWithCaveFrame:(CGRect)caveFrame numberOfSubdivisions:(int)numDivisions filePath:(NSString *)filePath{
+-(id)initWithCaveFrame:(CGRect)caveFrame filePath:(NSString *)filePath{
     self = [super init];
     if (self) {
         _caveFrame = caveFrame;
         
         //get size of each cave subdivision
-        _subDivisionSize = _caveFrame.size.height/numDivisions;
+        _subDivisionSize = _caveFrame.size.height/NUMBER_OF_CAVE_DIVISIONS;
         
         //bat view frame
         CGRect batFrame = CGRectMake(caveFrame.origin.x + BAT_X_OFFSET, caveFrame.origin.y + BAT_Y_OFFSET, _subDivisionSize, _subDivisionSize);

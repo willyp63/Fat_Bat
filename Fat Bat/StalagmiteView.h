@@ -10,4 +10,6 @@
 
 @interface StalagmiteView : UIView
 
+-(id)initWithFrame:(CGRect)frame color:(UIColor *)color borderWidth:(CGFloat)borderWidth facingDown:(BOOL)facingDown;
+
 @end

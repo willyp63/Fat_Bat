@@ -10,19 +10,6 @@
 
 @implementation GameViewController
 
-static CGFloat UPDATE_TIME_INTERVAL = 0.2;
-
-static int NUMBER_OF_CAVE_DIVISIONS = 9;
-
-static CGFloat CAVE_BORDER_WIDTH = 4.0;
-static CGFloat CAVE_CEILING_HEIGHT = 10;
-static CGFloat CAVE_FLOOR_HEIGHT = 10;
-
-static CGFloat BUTTON_OFFSET = 20.0;
-static CGFloat BUTTON_WIDTH = 80.0;
-static CGFloat BUTTON_HEIGHT = 40.0;
-
-
 -(id)initWithLevelName:(NSString *)levelName{
     self = [super init];
     if (self) {
@@ -31,59 +18,76 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //start new game
     [self startNewGame];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    //hide navigation bar
     self.navigationController.navigationBarHidden = YES;
 }
 
+
 -(void)startNewGame{
+    //stop update timer
+    if (_updateTimer) {[_updateTimer invalidate];}
+    
+    //remove all subviews
+    for (UIView *view in self.view.subviews) {[view removeFromSuperview];}
+    
+    
     //get screen deminsions
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     CGFloat statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
     
+    
     //cave frame
     CGRect caveFrame = CGRectMake(0.0, statusBarHeight + CAVE_CEILING_HEIGHT, screenSize.width, screenSize.height - statusBarHeight - CAVE_CEILING_HEIGHT - CAVE_FLOOR_HEIGHT);
     
-    //cave layer frame
-    CGRect caveLayerFrame = CGRectMake(caveFrame.origin.x - CAVE_BORDER_WIDTH, caveFrame.origin.y, caveFrame.size.width + CAVE_BORDER_WIDTH*2, caveFrame.size.height);
-    
-    //pause button frame
-    CGRect pauseButtonFrame = CGRectMake(screenSize.width - BUTTON_WIDTH - BUTTON_OFFSET, BUTTON_OFFSET + statusBarHeight, BUTTON_WIDTH, BUTTON_HEIGHT);
-    
-    //quit button frame
-    CGRect quitButtonFrame = CGRectMake(BUTTON_OFFSET, BUTTON_OFFSET + statusBarHeight, BUTTON_WIDTH, BUTTON_HEIGHT);
-    
-    
     //init model
     NSString *levelFilePath = [[NSBundle mainBundle] pathForResource:_levelName ofType:@"txt"];
-    _model = [[GameModel alloc] initWithCaveFrame:caveFrame numberOfSubdivisions:NUMBER_OF_CAVE_DIVISIONS filePath:levelFilePath];
+    _model = [[GameModel alloc] initWithCaveFrame:caveFrame filePath:levelFilePath];
     
     
-    //set root view background color
-    self.view.backgroundColor = [UIColor colorWithRed:1.0 green:178.0/255.0 blue:102.0/255.0 alpha:1.0];
+    //cave colors
+    _outerCaveColor = [UIColor colorWithRed:OUTER_CAVE_RED green:OUTER_CAVE_GREEN blue:OUTER_CAVE_BLUE alpha:1.0];
+    UIColor *innerCaveColor = [UIColor colorWithRed:INNER_CAVE_RED green:INNER_CAVE_GREEN blue:INNER_CAVE_BLUE alpha:1.0];
     
-    //create cave layer and add to root layer
-    CALayer *caveLayer = [CALayer layer];
-    caveLayer.frame = caveLayerFrame;
-    caveLayer.borderWidth = CAVE_BORDER_WIDTH;
-    caveLayer.borderColor = [UIColor blackColor].CGColor;
-    caveLayer.backgroundColor = [UIColor colorWithRed:153.0/255.0 green:76.0/255.0 blue:0.0 alpha:1.0].CGColor;
-    [self.view.layer addSublayer:caveLayer];
     
-    //create bat view and add to root view
-    _batView = [[BatView alloc] initWithFrame:_model.bat.frame];
-    [self.view addSubview:_batView];
+    //init cave view and add to root view
+    CGRect caveViewFrame = CGRectMake(caveFrame.origin.x - BORDER_WIDTH, caveFrame.origin.y, caveFrame.size.width + BORDER_WIDTH*2, caveFrame.size.height);
+    UIView *caveView = [[UIView alloc] initWithFrame:caveViewFrame];
+    caveView.layer.borderWidth = BORDER_WIDTH;
+    caveView.layer.borderColor = [UIColor blackColor].CGColor;
+    caveView.layer.backgroundColor = innerCaveColor.CGColor;
+    [self.view addSubview:caveView];
+    
     
     //init finish line view and layer
-    _finishLineView = [[UIView alloc] initWithFrame:CGRectMake(_model.finishLine, caveFrame.origin.y, 4.0, caveFrame.size.height)];
-    _finishLineView.layer.borderWidth = 4.0;
-    _finishLineView.layer.borderColor = [UIColor greenColor].CGColor;
+    CGRect finishLineFrame = CGRectMake(_model.finishLine, caveFrame.origin.y + BORDER_WIDTH, FINISH_LINE_WIDTH, caveFrame.size.height - BORDER_WIDTH*2.0);
+    _finishLineView = [[FinishLineView alloc] initWithFrame:finishLineFrame numberOfColumns:FINISH_LINE_NUM_COLUMNS];
     [self.view addSubview:_finishLineView];
+    
+    
+    //create bat view and add to root view
+    _batView = [[BatView alloc] initWithFrame:_model.bat.frame borderWidth:BORDER_WIDTH];
+    [self.view addSubview:_batView];
+    
+    
+    //create and add ceailing and floor views
+    _caveCeilingView = [[UIView alloc] initWithFrame:CGRectMake(0.0, statusBarHeight, caveFrame.size.width, CAVE_CEILING_HEIGHT)];
+    _caveFloorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, caveFrame.origin.y + caveFrame.size.height, caveFrame.size.width, CAVE_FLOOR_HEIGHT)];
+    _caveCeilingView.backgroundColor = _outerCaveColor;
+    _caveFloorView.backgroundColor = _outerCaveColor;
+    [self.view addSubview:_caveCeilingView];
+    [self.view addSubview:_caveFloorView];
+    
     
     //init stalagmite views
     _stalagmiteViews = [[NSMutableArray alloc] initWithCapacity:_model.numStalagmite];
@@ -97,28 +101,31 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     [self.view addSubview:_holdButton];
     
     //init and add pause button to root view
+    CGRect pauseButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
     _pauseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _pauseButton.frame = pauseButtonFrame;
-    _pauseButton.layer.borderWidth = 4.0;
+    _pauseButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
+    _pauseButton.layer.borderWidth = BORDER_WIDTH;
     _pauseButton.layer.borderColor = [UIColor blackColor].CGColor;
-    _pauseButton.layer.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0].CGColor;
+    _pauseButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
     [_pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_pauseButton];
-    _paused = NO;
     
     //init and add label to pause button view
     UILabel *pauseButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, pauseButtonFrame.size.width, pauseButtonFrame.size.height)];
     pauseButtonLabel.text = @"pause";
     pauseButtonLabel.textAlignment = NSTextAlignmentCenter;
-    pauseButtonLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0];
+    pauseButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
     [_pauseButton addSubview:pauseButtonLabel];
     
     //init and add quit button to root view
+    CGRect quitButtonFrame = CGRectMake(GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
     _quitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _quitButton.frame = quitButtonFrame;
-    _quitButton.layer.borderWidth = 4.0;
+    _quitButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
+    _quitButton.layer.borderWidth = BORDER_WIDTH;
     _quitButton.layer.borderColor = [UIColor blackColor].CGColor;
-    _quitButton.layer.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0].CGColor;
+    _quitButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
     [_quitButton addTarget:self action:@selector(quitGame) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_quitButton];
     
@@ -126,7 +133,7 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     UILabel *quitButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, quitButtonFrame.size.width, quitButtonFrame.size.height)];
     quitButtonLabel.text = @"quit";
     quitButtonLabel.textAlignment = NSTextAlignmentCenter;
-    quitButtonLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:24.0];
+    quitButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
     [_quitButton addSubview:quitButtonLabel];
     
     
@@ -134,28 +141,24 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
 }
 
--(void)fingerDown{
-    [_model setIsDiving:YES];
-    [_batView setIsDiving:YES];
-}
-
--(void)fingerUp{
-    [_model setIsDiving:NO];
-    [_batView setIsDiving:NO];
-}
 
 -(void)pauseGame{
-    if (_paused) {
-        _paused = NO;
+    //if game is paused
+    if (_model.state == PAUSED) {
+        //set state to in progress
+        [_model setState:IN_PROGRESS];
         
+        //clear hold button's bg
         _holdButton.backgroundColor = [UIColor clearColor];
         
         //start update timer
         _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
     }else{
-        _paused = YES;
+        //set state to paused
+        [_model setState:PAUSED];
         
-        _holdButton.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+        //set opaque layer over cave views
+        _holdButton.backgroundColor = [UIColor colorWithRed:OPAQUE_RED green:OPAQUE_GREEN blue:OPAQUE_BLUE alpha:OPAQUE_ALPHA];
         
         //stop update timer
         [_updateTimer invalidate];
@@ -163,16 +166,62 @@ static CGFloat BUTTON_HEIGHT = 40.0;
 }
 
 -(void)quitGame{
-    self.navigationController.navigationBarHidden = NO;
+    //pop view controller
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)breakDownUI{
-    [_updateTimer invalidate];
-    for (UIView *view in self.view.subviews) {
-        [view removeFromSuperview];
+-(void)levelComplete{
+    //load file and spereate into lines
+    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/levels.txt"];
+    NSString *string = [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
+    NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+    //this levels string in file
+    NSString *levelString = [_levelName stringByAppendingString:@" NO"];
+    
+    //search for level string
+    for (int i = 0; i < lines.count; i++) {
+        NSString *line = lines[i];
+        
+        //is level string
+        if ([line isEqualToString:levelString]) {
+            
+            //build new string to write to file
+            string = @"";
+            for (int j = 0; j < lines.count; j++) {
+                //if its this levels line, write new line
+                if (i == j) {
+                    string = [string stringByAppendingString:[_levelName stringByAppendingString:@" YES"]];
+                }
+                //else copy old line
+                else{
+                    string = [string stringByAppendingString:lines[j]];
+                }
+                
+                //return if not the last line
+                if (j < lines.count - 1) {string = [string stringByAppendingString:@"\r"];}
+            }
+            
+            //write to file
+            [string writeToFile:docPath atomically:NO encoding:NSUTF8StringEncoding error:nil];
+            break;
+        }
     }
+    
+    [self quitGame];
 }
+
+-(void)fingerDown{[self setIsDiving:YES];}
+-(void)fingerUp{[self setIsDiving:NO];}
+
+-(void)setIsDiving:(BOOL)isDiving{
+    //update model
+    [_model setIsDiving:isDiving];
+    
+    //update view if not paused
+    if(_model.state != PAUSED) {[_batView setIsDiving:isDiving];}
+}
+
 
 -(void)update{
     //get start time
@@ -181,15 +230,18 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     
     //check for game over
     if (_model.state == GAME_OVER) {
-        [self breakDownUI];
         [self startNewGame];
         return;
-    }else if(_model.state == LEVEL_COMPLETE){
-        [self quitGame];
+    }
+    
+    //check for level complete
+    if(_model.state == LEVEL_COMPLETE){
+        [self levelComplete];
+        return;
     }
     
     
-    //remove characters
+    //remove stalagmite
     for (int i = 0; i < _stalagmiteViews.count; i++) {
         UIView *stalagmiteView = _stalagmiteViews[i];
         
@@ -200,21 +252,22 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     }
     [_model removeCharacters];
     
-    //add new characters
+    
+    //add new stalagmite
     [_model addNewCharacters];
     for (int i = (int)_stalagmiteViews.count; i < (int)_model.stalagmite.count; i++) {
         GameObjectModel *stalagmiteObject = _model.stalagmite[i];
         
-        UIView *stalagmiteView = [[UIView alloc] initWithFrame:stalagmiteObject.frame];
-        stalagmiteView.layer.borderWidth = 2.0;
-        stalagmiteView.layer.borderColor = [UIColor blackColor].CGColor;
-        stalagmiteView.layer.backgroundColor = [UIColor colorWithRed:1.0 green:178.0/255.0 blue:102.0/255.0 alpha:1.0].CGColor;
-        [self.view addSubview:stalagmiteView];
+        BOOL facingDown = (stalagmiteObject.frame.origin.y == _model.caveFrame.origin.y);
+        StalagmiteView *stalagmiteView = [[StalagmiteView alloc] initWithFrame:stalagmiteObject.frame color:_outerCaveColor borderWidth:BORDER_WIDTH facingDown:facingDown];
         
+        [self.view addSubview:stalagmiteView];
         [_stalagmiteViews addObject:stalagmiteView];
     }
     
     //bring ui views in front of new views
+    [self.view bringSubviewToFront:_caveFloorView];
+    [self.view bringSubviewToFront:_caveCeilingView];
     [self.view bringSubviewToFront:_holdButton];
     [self.view bringSubviewToFront:_pauseButton];
     [self.view bringSubviewToFront:_quitButton];
@@ -224,9 +277,14 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     [_model update];
 
     
-    //update bat
-    CGFloat angle = (_model.bat.velocity.y / TERMINAL_Y_VELOCITY)*3.14/8.0;
+    //set bat angle based on y velocity
+    CGFloat angle = (_model.bat.velocity.y / TERMINAL_Y_VELOCITY) * MAX_FLY_ANGLE;
     [_batView setAngle:angle];
+    
+    //set bat views isdiving property if not already done so
+    if ([_model isDiving] != [_batView isDiving]) {
+        [_batView setIsDiving:_model.isDiving];
+    }
     
     //check for bounce
     if (_model.didBounce) {
@@ -266,22 +324,18 @@ static CGFloat BUTTON_HEIGHT = 40.0;
     
     //update finish line view
     [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
-        _finishLineView.frame = CGRectMake(_model.finishLine, _model.caveFrame.origin.y, 4.0, _model.caveFrame.size.height);
+        _finishLineView.frame = CGRectMake(_model.finishLine, _model.caveFrame.origin.y + BORDER_WIDTH, FINISH_LINE_WIDTH, _model.caveFrame.size.height - BORDER_WIDTH*2.0);
     }completion:NULL];
 
     
     //get elapsed time
     CFTimeInterval elapsedTime = CACurrentMediaTime() - startTime;
     
-    if (!_paused) {
+    //if not paused
+    if (_model.state != PAUSED) {
         //start update timer
         _updateTimer = [NSTimer scheduledTimerWithTimeInterval:(UPDATE_TIME_INTERVAL - elapsedTime) target:self selector:@selector(update) userInfo:Nil repeats:NO];
     }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

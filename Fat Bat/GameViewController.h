@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIDefinitions.h"
 
 #import "BatView.h"
+#import "StalagmiteView.h"
+#import "FinishLineView.h"
 #import "GameModel.h"
 
 @interface GameViewController : UIViewController
 
 -(id)initWithLevelName:(NSString *)levelName;
-
-@property BOOL paused;
 
 @property NSString *levelName;
 
@@ -23,10 +24,15 @@
 @property UIButton *pauseButton;
 @property UIButton *quitButton;
 
-@property UIView *finishLineView;
+@property UIView *caveFloorView;
+@property UIView *caveCeilingView;
+
+@property UIColor *outerCaveColor;
+
+@property FinishLineView *finishLineView;
 
 @property BatView *batView;
-@property NSMutableArray<UIView *> *stalagmiteViews;
+@property NSMutableArray<StalagmiteView *> *stalagmiteViews;
 
 @property GameModel *model;
 @property NSTimer *updateTimer;

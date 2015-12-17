@@ -15,6 +15,9 @@
 		4605694C1C208B2900D60E0E /* LevelSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4605694A1C208B2900D60E0E /* LevelSelectViewController.m */; };
 		460569501C20961200D60E0E /* levels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4605694F1C20961200D60E0E /* levels.txt */; };
 		460569551C20B46D00D60E0E /* TitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 460569541C20B46D00D60E0E /* TitleViewController.m */; };
+		4635C6961C21F42C006CF4D5 /* FinishLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4635C6951C21F42C006CF4D5 /* FinishLineView.m */; };
+		4635C69A1C21F96E006CF4D5 /* StalagmiteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4635C6991C21F96E006CF4D5 /* StalagmiteView.m */; };
+		4635C69D1C225546006CF4D5 /* level_3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4635C69C1C225546006CF4D5 /* level_3.txt */; };
 		4674F6021C1CB04D00701996 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6011C1CB04D00701996 /* main.m */; };
 		4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6041C1CB04D00701996 /* AppDelegate.m */; };
 		4674F6081C1CB04D00701996 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6071C1CB04D00701996 /* GameViewController.m */; };
@@ -37,6 +40,12 @@
 		4605694F1C20961200D60E0E /* levels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = levels.txt; sourceTree = "<group>"; };
 		460569531C20B46D00D60E0E /* TitleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleViewController.h; sourceTree = "<group>"; };
 		460569541C20B46D00D60E0E /* TitleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleViewController.m; sourceTree = "<group>"; };
+		4635C6941C21F42C006CF4D5 /* FinishLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinishLineView.h; sourceTree = "<group>"; };
+		4635C6951C21F42C006CF4D5 /* FinishLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinishLineView.m; sourceTree = "<group>"; };
+		4635C6981C21F96E006CF4D5 /* StalagmiteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StalagmiteView.h; sourceTree = "<group>"; };
+		4635C6991C21F96E006CF4D5 /* StalagmiteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StalagmiteView.m; sourceTree = "<group>"; };
+		4635C69B1C223D99006CF4D5 /* UIDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIDefinitions.h; sourceTree = "<group>"; };
+		4635C69C1C225546006CF4D5 /* level_3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level_3.txt; sourceTree = "<group>"; };
 		4674F5FD1C1CB04D00701996 /* Fat Bat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fat Bat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4674F6011C1CB04D00701996 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4674F6031C1CB04D00701996 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -66,6 +75,7 @@
 				4605694F1C20961200D60E0E /* levels.txt */,
 				460569441C1E706800D60E0E /* level_1.txt */,
 				4605693F1C1E1B2900D60E0E /* level_2.txt */,
+				4635C69C1C225546006CF4D5 /* level_3.txt */,
 			);
 			name = levels;
 			sourceTree = "<group>";
@@ -73,7 +83,6 @@
 		460569571C20B8FB00D60E0E /* game */ = {
 			isa = PBXGroup;
 			children = (
-				4605694E1C2095F700D60E0E /* levels */,
 				4674F6061C1CB04D00701996 /* GameViewController.h */,
 				4674F6071C1CB04D00701996 /* GameViewController.m */,
 				460569361C1DEDB100D60E0E /* GameModel.h */,
@@ -82,6 +91,10 @@
 				4605693A1C1DEF9000D60E0E /* GameObjectModel.m */,
 				4605693C1C1E058000D60E0E /* BatView.h */,
 				4605693D1C1E058000D60E0E /* BatView.m */,
+				4635C6941C21F42C006CF4D5 /* FinishLineView.h */,
+				4635C6951C21F42C006CF4D5 /* FinishLineView.m */,
+				4635C6981C21F96E006CF4D5 /* StalagmiteView.h */,
+				4635C6991C21F96E006CF4D5 /* StalagmiteView.m */,
 			);
 			name = game;
 			sourceTree = "<group>";
@@ -89,10 +102,11 @@
 		460569581C20B90200D60E0E /* menu */ = {
 			isa = PBXGroup;
 			children = (
-				460569491C208B2900D60E0E /* LevelSelectViewController.h */,
-				4605694A1C208B2900D60E0E /* LevelSelectViewController.m */,
 				460569531C20B46D00D60E0E /* TitleViewController.h */,
 				460569541C20B46D00D60E0E /* TitleViewController.m */,
+				460569491C208B2900D60E0E /* LevelSelectViewController.h */,
+				4605694A1C208B2900D60E0E /* LevelSelectViewController.m */,
+				4635C69B1C223D99006CF4D5 /* UIDefinitions.h */,
 			);
 			name = menu;
 			sourceTree = "<group>";
@@ -118,12 +132,13 @@
 			children = (
 				4674F6031C1CB04D00701996 /* AppDelegate.h */,
 				4674F6041C1CB04D00701996 /* AppDelegate.m */,
+				460569581C20B90200D60E0E /* menu */,
+				460569571C20B8FB00D60E0E /* game */,
+				4605694E1C2095F700D60E0E /* levels */,
 				4674F6091C1CB04D00701996 /* Main.storyboard */,
 				4674F60C1C1CB04D00701996 /* Assets.xcassets */,
 				4674F60E1C1CB04D00701996 /* LaunchScreen.storyboard */,
 				4674F6111C1CB04D00701996 /* Info.plist */,
-				460569581C20B90200D60E0E /* menu */,
-				460569571C20B8FB00D60E0E /* game */,
 				4674F6001C1CB04D00701996 /* Supporting Files */,
 			);
 			path = "Fat Bat";
@@ -196,6 +211,7 @@
 			files = (
 				4674F6101C1CB04D00701996 /* LaunchScreen.storyboard in Resources */,
 				460569401C1E1B2900D60E0E /* level_2.txt in Resources */,
+				4635C69D1C225546006CF4D5 /* level_3.txt in Resources */,
 				4674F60D1C1CB04D00701996 /* Assets.xcassets in Resources */,
 				460569501C20961200D60E0E /* levels.txt in Resources */,
 				4674F60B1C1CB04D00701996 /* Main.storyboard in Resources */,
@@ -213,11 +229,13 @@
 				4674F6081C1CB04D00701996 /* GameViewController.m in Sources */,
 				460569551C20B46D00D60E0E /* TitleViewController.m in Sources */,
 				460569381C1DEDB100D60E0E /* GameModel.m in Sources */,
+				4635C6961C21F42C006CF4D5 /* FinishLineView.m in Sources */,
 				4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */,
 				4605693B1C1DEF9000D60E0E /* GameObjectModel.m in Sources */,
 				4605693E1C1E058000D60E0E /* BatView.m in Sources */,
 				4674F6021C1CB04D00701996 /* main.m in Sources */,
 				4605694C1C208B2900D60E0E /* LevelSelectViewController.m in Sources */,
+				4635C69A1C21F96E006CF4D5 /* StalagmiteView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

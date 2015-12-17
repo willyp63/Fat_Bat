@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface FinishLineView : UIView
+
+-(id)initWithFrame:(CGRect)frame numberOfColumns:(int)numColumns;
 
 @end

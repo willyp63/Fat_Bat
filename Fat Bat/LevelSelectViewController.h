@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIDefinitions.h"
 #import "GameViewController.h"
 
 @interface LevelSelectViewController : UITableViewController
