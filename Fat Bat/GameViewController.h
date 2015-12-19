@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIDefinitions.h"
-
+#import "LevelFileHandler.h"
 #import "BatView.h"
 #import "StalagmiteView.h"
 #import "FinishLineView.h"

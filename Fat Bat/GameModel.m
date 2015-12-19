@@ -10,7 +10,7 @@
 
 @implementation GameModel
 
--(id)initWithCaveFrame:(CGRect)caveFrame filePath:(NSString *)filePath{
+-(id)initWithCaveFrame:(CGRect)caveFrame levelName:(NSString *)levelName{
     self = [super init];
     if (self) {
         _caveFrame = caveFrame;
@@ -43,7 +43,7 @@
         
         
         //load file and spereate into lines
-        NSString *string = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *string = [LevelFileHandler levelWithName:levelName];
         NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         
         //get number of stalagmite

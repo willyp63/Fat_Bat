@@ -38,20 +38,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    //get documents path
-    NSString * component = [NSString stringWithFormat:@"Documents/%@.txt", LEVELS_FILE_NAME];
-    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:component];
-    
-    //check if documents file exists
-    if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
-        //copy file from bundle to documents
-        NSString *bundlePath = [[NSBundle mainBundle] pathForResource:LEVELS_FILE_NAME ofType:@"txt"];
-        NSString *string = [NSString stringWithContentsOfFile:bundlePath encoding:NSUTF8StringEncoding error:nil];
-        [string writeToFile:docPath atomically:NO encoding:NSUTF8StringEncoding error:nil];
-    }
-    
-    //load file and get lines
-    NSString *string = [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
+    //get lines frim level file
+    NSString *string = [LevelFileHandler levelsFile];
     _lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     //reload table's data
@@ -80,8 +68,7 @@
     
 
     //load level file and spereate into lines
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:levelName ofType:@"txt"];
-    NSString *string = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    NSString *string = [LevelFileHandler levelWithName:levelName];
     NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     //get color from line 2

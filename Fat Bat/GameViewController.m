@@ -51,8 +51,7 @@
     CGRect caveFrame = CGRectMake(0.0, statusBarHeight + CAVE_CEILING_HEIGHT, screenSize.width, screenSize.height - statusBarHeight - CAVE_CEILING_HEIGHT - CAVE_FLOOR_HEIGHT);
     
     //init model
-    NSString *levelFilePath = [[NSBundle mainBundle] pathForResource:_levelName ofType:@"txt"];
-    _model = [[GameModel alloc] initWithCaveFrame:caveFrame filePath:levelFilePath];
+    _model = [[GameModel alloc] initWithCaveFrame:caveFrame levelName:_levelName];
     
     
     //cave colors
@@ -177,45 +176,8 @@
 }
 
 -(void)levelComplete{
-    //get documents path
-    NSString * component = [NSString stringWithFormat:@"Documents/%@.txt", LEVELS_FILE_NAME];
-    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:component];
-    
-    //load file and spereate into lines
-    NSString *string = [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
-    NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-    //this levels string in file
-    NSString *levelString = [_levelName stringByAppendingString:@" NO"];
-    
-    //search for level string
-    for (int i = 0; i < lines.count; i++) {
-        NSString *line = lines[i];
-        
-        //is level string
-        if ([line isEqualToString:levelString]) {
-            
-            //build new string to write to file
-            string = @"";
-            for (int j = 0; j < lines.count; j++) {
-                //if its this levels line, write new line
-                if (i == j) {
-                    string = [string stringByAppendingString:[_levelName stringByAppendingString:@" YES"]];
-                }
-                //else copy old line
-                else{
-                    string = [string stringByAppendingString:lines[j]];
-                }
-                
-                //return if not the last line
-                if (j < lines.count - 1) {string = [string stringByAppendingString:@"\r"];}
-            }
-            
-            //write to file
-            [string writeToFile:docPath atomically:NO encoding:NSUTF8StringEncoding error:nil];
-            break;
-        }
-    }
+    //update levels file
+    [LevelFileHandler setLevelComplete:_levelName];
     
     [self quitGame];
 }

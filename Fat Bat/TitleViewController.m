@@ -99,14 +99,8 @@
     //gray reset button
     _resetButton.layer.backgroundColor = [UIColor grayColor].CGColor;
     
-    //get documents path
-    NSString * component = [NSString stringWithFormat:@"Documents/%@.txt", LEVELS_FILE_NAME];
-    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:component];
-    
-    //copy file from bundle to documents
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:LEVELS_FILE_NAME ofType:@"txt"];
-    NSString *string = [NSString stringWithContentsOfFile:bundlePath encoding:NSUTF8StringEncoding error:nil];
-    [string writeToFile:docPath atomically:NO encoding:NSUTF8StringEncoding error:nil];
+    //reset levels file
+    [LevelFileHandler resetLevelsFile];
 }
 
 @end

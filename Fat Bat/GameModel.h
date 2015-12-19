@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIDefinitions.h"
+#import "LevelFileHandler.h"
 #import "GameObjectModel.h"
 #import "GameDefinitions.h"
 
@@ -22,7 +22,7 @@ typedef enum gameState{
 @interface GameModel : NSObject
 
 
--(id)initWithCaveFrame:(CGRect)caveFrame filePath:(NSString *)filePath;
+-(id)initWithCaveFrame:(CGRect)caveFrame levelName:(NSString *)levelName;
 
 -(void)update;
 

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIDefinitions.h"
+#import "LevelFileHandler.h"
 #import "LevelSelectViewController.h"
 
 @interface TitleViewController : UIViewController
