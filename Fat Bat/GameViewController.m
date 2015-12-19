@@ -56,21 +56,27 @@
     
     
     //cave colors
-    _outerCaveColor = [UIColor colorWithRed:OUTER_CAVE_RED green:OUTER_CAVE_GREEN blue:OUTER_CAVE_BLUE alpha:1.0];
-    UIColor *innerCaveColor = [UIColor colorWithRed:INNER_CAVE_RED green:INNER_CAVE_GREEN blue:INNER_CAVE_BLUE alpha:1.0];
+    _outerCaveColor = [UIColor colorWithRed:_model.colorRGBValues[0].floatValue green:_model.colorRGBValues[1].floatValue blue:_model.colorRGBValues[2].floatValue alpha:1.0];
+    UIColor *innerCaveColor = [UIColor colorWithRed:_model.colorRGBValues[0].floatValue/3.0 green:_model.colorRGBValues[1].floatValue/3.0 blue:_model.colorRGBValues[2].floatValue/3.0 alpha:1.0];
+    UIColor *shadowCaveColor = [UIColor colorWithRed:_model.colorRGBValues[0].floatValue/1.5 green:_model.colorRGBValues[1].floatValue/1.5 blue:_model.colorRGBValues[2].floatValue/1.5 alpha:1.0];
     
+    //set bg color
+    self.view.backgroundColor = _outerCaveColor;
     
     //init cave view and add to root view
-    CGRect caveViewFrame = CGRectMake(caveFrame.origin.x - BORDER_WIDTH, caveFrame.origin.y, caveFrame.size.width + BORDER_WIDTH*2, caveFrame.size.height);
+    CGRect caveViewFrame = CGRectMake(caveFrame.origin.x - BORDER_WIDTH*2.0, caveFrame.origin.y, caveFrame.size.width + BORDER_WIDTH*4.0, caveFrame.size.height);
     UIView *caveView = [[UIView alloc] initWithFrame:caveViewFrame];
-    caveView.layer.borderWidth = BORDER_WIDTH;
-    caveView.layer.borderColor = [UIColor blackColor].CGColor;
-    caveView.layer.backgroundColor = innerCaveColor.CGColor;
+    CAGradientLayer *caveLayer = [CAGradientLayer layer];
+    caveLayer.frame = caveView.bounds;
+    caveLayer.borderWidth = BORDER_WIDTH*2.0;
+    caveLayer.borderColor = [UIColor blackColor].CGColor;
+    caveLayer.colors = [NSArray arrayWithObjects:(id)shadowCaveColor.CGColor, (id)innerCaveColor.CGColor, (id)innerCaveColor.CGColor, (id)shadowCaveColor.CGColor, nil];
+    caveLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:0.45], [NSNumber numberWithFloat:0.55], nil];
+    [caveView.layer addSublayer:caveLayer];
     [self.view addSubview:caveView];
     
-    
     //init finish line view and layer
-    CGRect finishLineFrame = CGRectMake(_model.finishLine, caveFrame.origin.y + BORDER_WIDTH, FINISH_LINE_WIDTH, caveFrame.size.height - BORDER_WIDTH*2.0);
+    CGRect finishLineFrame = CGRectMake(_model.finishLine, caveFrame.origin.y + BORDER_WIDTH*2.0, _model.subDivisionSize, caveFrame.size.height - BORDER_WIDTH*4.0);
     _finishLineView = [[FinishLineView alloc] initWithFrame:finishLineFrame numberOfColumns:FINISH_LINE_NUM_COLUMNS];
     [self.view addSubview:_finishLineView];
     
@@ -81,8 +87,8 @@
     
     
     //create and add ceailing and floor views
-    _caveCeilingView = [[UIView alloc] initWithFrame:CGRectMake(0.0, statusBarHeight, caveFrame.size.width, CAVE_CEILING_HEIGHT)];
-    _caveFloorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, caveFrame.origin.y + caveFrame.size.height, caveFrame.size.width, CAVE_FLOOR_HEIGHT)];
+    _caveCeilingView = [[UIView alloc] initWithFrame:CGRectMake(0.0, statusBarHeight, caveFrame.size.width, CAVE_CEILING_HEIGHT + BORDER_WIDTH)];
+    _caveFloorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, caveFrame.origin.y + caveFrame.size.height - BORDER_WIDTH, caveFrame.size.width, CAVE_FLOOR_HEIGHT + BORDER_WIDTH)];
     _caveCeilingView.backgroundColor = _outerCaveColor;
     _caveFloorView.backgroundColor = _outerCaveColor;
     [self.view addSubview:_caveCeilingView];
@@ -100,26 +106,8 @@
     [_holdButton addTarget:self action:@selector(fingerUp) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_holdButton];
     
-    //init and add pause button to root view
-    CGRect pauseButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
-    _pauseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _pauseButton.frame = pauseButtonFrame;
-    _pauseButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
-    _pauseButton.layer.borderWidth = BORDER_WIDTH;
-    _pauseButton.layer.borderColor = [UIColor blackColor].CGColor;
-    _pauseButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
-    [_pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:_pauseButton];
-    
-    //init and add label to pause button view
-    UILabel *pauseButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, pauseButtonFrame.size.width, pauseButtonFrame.size.height)];
-    pauseButtonLabel.text = @"pause";
-    pauseButtonLabel.textAlignment = NSTextAlignmentCenter;
-    pauseButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
-    [_pauseButton addSubview:pauseButtonLabel];
-    
     //init and add quit button to root view
-    CGRect quitButtonFrame = CGRectMake(GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
+    CGRect quitButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
     _quitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _quitButton.frame = quitButtonFrame;
     _quitButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
@@ -135,6 +123,24 @@
     quitButtonLabel.textAlignment = NSTextAlignmentCenter;
     quitButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
     [_quitButton addSubview:quitButtonLabel];
+    
+    //init and add pause button to root view
+    CGRect pauseButtonFrame = CGRectMake(quitButtonFrame.origin.x - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
+    _pauseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _pauseButton.frame = pauseButtonFrame;
+    _pauseButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
+    _pauseButton.layer.borderWidth = BORDER_WIDTH;
+    _pauseButton.layer.borderColor = [UIColor blackColor].CGColor;
+    _pauseButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
+    [_pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:_pauseButton];
+    
+    //init and add label to pause button view
+    UILabel *pauseButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, pauseButtonFrame.size.width, pauseButtonFrame.size.height)];
+    pauseButtonLabel.text = @"pause";
+    pauseButtonLabel.textAlignment = NSTextAlignmentCenter;
+    pauseButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
+    [_pauseButton addSubview:pauseButtonLabel];
     
     
     //start update timer
@@ -171,8 +177,11 @@
 }
 
 -(void)levelComplete{
+    //get documents path
+    NSString * component = [NSString stringWithFormat:@"Documents/%@.txt", LEVELS_FILE_NAME];
+    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:component];
+    
     //load file and spereate into lines
-    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/levels.txt"];
     NSString *string = [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
@@ -278,7 +287,7 @@
 
     
     //set bat angle based on y velocity
-    CGFloat angle = (_model.bat.velocity.y / TERMINAL_Y_VELOCITY) * MAX_FLY_ANGLE;
+    CGFloat angle = (_model.bat.velocity.y / _model.terminalYVelocity) * MAX_FLY_ANGLE;
     [_batView setAngle:angle];
     
     //set bat views isdiving property if not already done so
@@ -324,7 +333,7 @@
     
     //update finish line view
     [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
-        _finishLineView.frame = CGRectMake(_model.finishLine, _model.caveFrame.origin.y + BORDER_WIDTH, FINISH_LINE_WIDTH, _model.caveFrame.size.height - BORDER_WIDTH*2.0);
+        _finishLineView.frame = CGRectMake(_model.finishLine, _model.caveFrame.origin.y + BORDER_WIDTH*2.0, _model.subDivisionSize, _model.caveFrame.size.height - BORDER_WIDTH*4.0);
     }completion:NULL];
 
     

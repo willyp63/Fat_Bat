@@ -9,16 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "UIDefinitions.h"
 #import "GameObjectModel.h"
+#import "GameDefinitions.h"
 
-
-#define NUMBER_OF_CAVE_DIVISIONS 9
-
-#define GRAVITY_FORCE 8.0
-#define DIVE_FORCE 16.0
-
-#define FLYING_VELOCITY 32.0
-#define TERMINAL_Y_VELOCITY 96.0
-
+#define IPHONE_6S_CAVE_WIDTH 667.0
+#define IPHONE_6S_CAVE_HEIGHT 355.0
 
 typedef enum gameState{
     IN_PROGRESS, GAME_OVER, LEVEL_COMPLETE, PAUSED
@@ -36,13 +30,18 @@ typedef enum gameState{
 -(void)removeCharacters;
 
 
-@property int time;
+@property CGFloat time;
 @property GameState state;
 @property BOOL isDiving;
 
 @property BOOL didBounce;
 @property CGFloat timeToBounce;
 @property CGFloat bounceFrameY;
+
+@property CGFloat flyingVelocity;
+@property CGFloat gravityForce;
+@property CGFloat diveForce;
+@property CGFloat terminalYVelocity;
 
 @property GameObjectModel *bat;
 @property NSMutableArray<GameObjectModel *> *stalagmite;
@@ -56,5 +55,7 @@ typedef enum gameState{
 @property CGPoint *stalagmiteLocations;
 
 @property int finishTime;
+
+@property NSArray <NSNumber *>*colorRGBValues;
 
 @end

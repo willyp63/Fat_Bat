@@ -18,8 +18,16 @@
         //get size of each cave subdivision
         _subDivisionSize = _caveFrame.size.height/NUMBER_OF_CAVE_DIVISIONS;
         
+        //get forces and velocity based on ratio to iphone 6s
+        CGFloat yRatio = _caveFrame.size.height / IPHONE_6S_CAVE_HEIGHT;
+        _flyingVelocity = FLYING_VELOCITY * (_caveFrame.size.width / IPHONE_6S_CAVE_WIDTH);
+        _gravityForce = GRAVITY_FORCE * yRatio;
+        _diveForce = DIVE_FORCE * yRatio;
+        _terminalYVelocity = TERMINAL_Y_VELOCITY * yRatio;
+        
+        
         //bat view frame
-        CGRect batFrame = CGRectMake(caveFrame.origin.x + BAT_X_OFFSET, caveFrame.origin.y + BAT_Y_OFFSET, _subDivisionSize, _subDivisionSize);
+        CGRect batFrame = CGRectMake(caveFrame.origin.x + _subDivisionSize, caveFrame.origin.y + _subDivisionSize, _subDivisionSize, _subDivisionSize);
         
         //init bat object
         _bat = [[GameObjectModel alloc] initWithFrame:batFrame];
@@ -28,7 +36,7 @@
         //init game state
         _state = IN_PROGRESS;
         _isDiving = NO;
-        _time = 0;
+        _time = 0.0;
         
         //init finishLine
         _finishLine = caveFrame.origin.x + caveFrame.size.width;
@@ -38,8 +46,13 @@
         NSString *string = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         
+        //get number of stalagmite
+        _numStalagmite = 0;
+        for (int i = 2; i < lines.count; i++) {
+            if ([lines[i] characterAtIndex:0] != '#') {_numStalagmite++;}
+        }
+        
         //init stalagmite location array
-        _numStalagmite = (int)lines.count - 1;
         _stalagmiteLocations = (CGPoint *)malloc(sizeof(CGPoint)*_numStalagmite);
         _nextStalagmiteIndex = 0;
         
@@ -49,40 +62,49 @@
         //get finish time from first line
         _finishTime = [lines[0] intValue];
         
+        //get color from line 2
+        NSArray *rgbValues = [lines[1] componentsSeparatedByString:@" "];
+        _colorRGBValues = [NSArray arrayWithObjects:[NSNumber numberWithFloat:[rgbValues[0] floatValue]/255.0], [NSNumber numberWithFloat:[rgbValues[1] floatValue]/255.0], [NSNumber numberWithFloat:[rgbValues[2] floatValue]/255.0], nil];
+        
         //add a location for each remaining line
-        for (int i = 1; i < lines.count; i++) {
+        for (int i = 2; i < lines.count; i++) {
+            if ([lines[i] characterAtIndex:0] == '#'){continue;}
+            
             //seperate line into words
             NSString *line = lines[i];
             NSArray *words = [line componentsSeparatedByString:@" "];
             
             //add location
-            _stalagmiteLocations[i - 1].x = [words[0] intValue];
-            _stalagmiteLocations[i - 1].y = [words[1] intValue];
+            _stalagmiteLocations[_nextStalagmiteIndex].x = [words[0] intValue];
+            _stalagmiteLocations[_nextStalagmiteIndex].y = [words[1] intValue];
+            _nextStalagmiteIndex++;
         }
+        
+        _nextStalagmiteIndex = 0;
     }
     return self;
 }
 
 
 -(void)update{
-    //increment time
-    _time++;
+    //increment time based on fly speed relative to the screen size
+    _time += _flyingVelocity / _subDivisionSize;
     
     
     //get bat velocity and apply gravity force
     CGPoint batVelocity = [_bat velocity];
-    batVelocity.y += GRAVITY_FORCE;
+    batVelocity.y += _gravityForce;
     
     //if diving apply dive force
     if (_isDiving) {
-        batVelocity.y += DIVE_FORCE;
+        batVelocity.y += _diveForce;
     }
     
     //limit y velocity
-    if (batVelocity.y > TERMINAL_Y_VELOCITY) {
-        batVelocity.y = TERMINAL_Y_VELOCITY;
-    }else if (batVelocity.y < -TERMINAL_Y_VELOCITY) {
-        batVelocity.y = -TERMINAL_Y_VELOCITY;
+    if (batVelocity.y > _terminalYVelocity) {
+        batVelocity.y = _terminalYVelocity;
+    }else if (batVelocity.y < -_terminalYVelocity) {
+        batVelocity.y = -_terminalYVelocity;
     }
     
     //set velocity and update
@@ -99,9 +121,9 @@
         CGFloat timeDiff = positionDiff / batVelocity.y;
         
         //calc velocity and position diff to correct for bounce
-        CGFloat velocityDiff = GRAVITY_FORCE*timeDiff;
+        CGFloat velocityDiff = _gravityForce*timeDiff;
         if (velocityDiff < 0.0) velocityDiff = 0.0;
-        positionDiff = timeDiff*(batVelocity.y - 2*GRAVITY_FORCE*timeDiff);
+        positionDiff = timeDiff*(batVelocity.y - 2*_gravityForce*timeDiff);
         if(positionDiff < 0.0) positionDiff = 0.0;
         
         //set frame and velocity
@@ -126,9 +148,9 @@
         CGFloat timeDiff = positionDiff / batVelocity.y;
         
         //calc velocity and position diff to correct for bounce
-        CGFloat velocityDiff = GRAVITY_FORCE*timeDiff;
+        CGFloat velocityDiff = _gravityForce*timeDiff;
         if (velocityDiff < 0.0) velocityDiff = 0.0;
-        positionDiff = timeDiff*(batVelocity.y - 2*GRAVITY_FORCE*timeDiff);
+        positionDiff = timeDiff*(batVelocity.y - 2*_gravityForce*timeDiff);
         if(positionDiff < 0.0) positionDiff = 0.0;
         
         //set frame and velocity
@@ -159,7 +181,7 @@
     
     //update finish line
     if (_time >= _finishTime) {
-        _finishLine -= FLYING_VELOCITY;
+        _finishLine -= _flyingVelocity;
         
         if (_bat.frame.origin.x + _bat.frame.size.width > _finishLine) {
             _state = LEVEL_COMPLETE;
@@ -174,7 +196,7 @@
     
     
     //get bat's old frame
-    CGRect oldBatFrame = CGRectMake(_bat.frame.origin.x - _bat.velocity.x - FLYING_VELOCITY, _bat.frame.origin.y - _bat.velocity.y, _bat.frame.size.width, _bat.frame.size.height);
+    CGRect oldBatFrame = CGRectMake(_bat.frame.origin.x - _bat.velocity.x - _flyingVelocity, _bat.frame.origin.y - _bat.velocity.y, _bat.frame.size.width, _bat.frame.size.height);
     
     //get center of old and new bat frame
     CGPoint p1 = CGPointMake(oldBatFrame.origin.x + oldBatFrame.size.width/2, oldBatFrame.origin.y + oldBatFrame.size.height/2);
@@ -244,28 +266,26 @@
 
 
 -(void)addNewCharacters{
-    //return if there are no more stalagmite
-    if (_nextStalagmiteIndex >= _numStalagmite) {
-        return;
-    }
-    
     //add new stalagmite while _time is equal to the x value of the next location
-    while(_time == _stalagmiteLocations[_nextStalagmiteIndex].x){
+    while(_nextStalagmiteIndex < _numStalagmite && _time > _stalagmiteLocations[_nextStalagmiteIndex].x - 1.0){
         //get y value
         int y = _stalagmiteLocations[_nextStalagmiteIndex].y;
+        
+        //calc x offset
+        CGFloat xOffset = (_stalagmiteLocations[_nextStalagmiteIndex].x - _time)*_subDivisionSize;
         
         //get stalagmite frame based on type of stalagmite
         CGRect stalagmiteFrame;
         if (y > 0) {
             CGFloat stalagmiteY = _caveFrame.origin.y + _caveFrame.size.height - (y * _subDivisionSize);
-            stalagmiteFrame = CGRectMake(_caveFrame.origin.x + _caveFrame.size.width, stalagmiteY, _subDivisionSize/2.0, (y * _subDivisionSize));
+            stalagmiteFrame = CGRectMake(_caveFrame.origin.x + _caveFrame.size.width + xOffset, stalagmiteY, _subDivisionSize/2.0, (y * _subDivisionSize));
         }else{
-            stalagmiteFrame = CGRectMake(_caveFrame.origin.x + _caveFrame.size.width, _caveFrame.origin.y, _subDivisionSize/2.0, (-y * _subDivisionSize));
+            stalagmiteFrame = CGRectMake(_caveFrame.origin.x + _caveFrame.size.width + xOffset, _caveFrame.origin.y, _subDivisionSize/2.0, (-y * _subDivisionSize));
         }
         
         //create object and init with -FLYING_VELOCITY
         GameObjectModel *stalagmiteObject = [[GameObjectModel alloc] initWithFrame:stalagmiteFrame];
-        [stalagmiteObject setVelocity:CGPointMake(-FLYING_VELOCITY, 0.0)];
+        [stalagmiteObject setVelocity:CGPointMake(-_flyingVelocity, 0.0)];
         [_stalagmite addObject:stalagmiteObject];
         
         //move to next location

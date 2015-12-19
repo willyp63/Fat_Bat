@@ -13,8 +13,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //set bg color
+    self.view.backgroundColor = [UIColor colorWithRed:UI_2_RED green:UI_2_GREEN blue:UI_2_BLUE alpha:1.0];
+    
     //configure table view
-    self.tableView.backgroundColor = [UIColor colorWithRed:OUTER_CAVE_RED green:OUTER_CAVE_GREEN blue:OUTER_CAVE_BLUE alpha:1.0];
+    self.tableView.backgroundColor = [UIColor colorWithRed:UI_2_RED green:UI_2_GREEN blue:UI_2_BLUE alpha:1.0];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     //configure navigation bar back button
@@ -26,7 +29,7 @@
     coverUpLayer.frame = CGRectMake(-BORDER_WIDTH, -BORDER_WIDTH, navigationFrame.size.width + BORDER_WIDTH*2.0, navigationFrame.size.height + BORDER_WIDTH);
     coverUpLayer.borderWidth = BORDER_WIDTH;
     coverUpLayer.borderColor = [UIColor blackColor].CGColor;
-    coverUpLayer.backgroundColor = [UIColor colorWithRed:INNER_CAVE_RED green:INNER_CAVE_GREEN blue:INNER_CAVE_BLUE alpha:1.0].CGColor;
+    coverUpLayer.backgroundColor = [UIColor colorWithRed:UI_1_RED green:UI_1_GREEN blue:UI_1_BLUE alpha:1.0].CGColor;
     
     //add layer
     [self.navigationController.navigationBar.layer addSublayer:coverUpLayer];
@@ -36,7 +39,8 @@
     [super viewWillAppear:animated];
     
     //get documents path
-    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/levels.txt"];
+    NSString * component = [NSString stringWithFormat:@"Documents/%@.txt", LEVELS_FILE_NAME];
+    NSString *docPath = [NSHomeDirectory() stringByAppendingPathComponent:component];
     
     //check if documents file exists
     if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
@@ -68,24 +72,42 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >= _lines.count) {return nil;}
+    
     //get level name
     NSArray *words = [_lines[indexPath.row] componentsSeparatedByString:@" "];
     NSString *levelName = words[0];
     
+
+    //load level file and spereate into lines
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:levelName ofType:@"txt"];
+    NSString *string = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+    //get color from line 2
+    NSArray *rgbValues = [lines[1] componentsSeparatedByString:@" "];
+    UIColor *levelColor = [UIColor colorWithRed:[rgbValues[0] floatValue]/255.0 green:[rgbValues[1] floatValue]/255.0 blue:[rgbValues[2] floatValue]/255.0 alpha:1.0];
+    
+    
     //create table cell and set text to level name
-    [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:levelName];
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:levelName];
-    cell.backgroundColor = [UIColor colorWithRed:OUTER_CAVE_RED green:OUTER_CAVE_GREEN blue:OUTER_CAVE_BLUE alpha:1.0];
-    cell.textLabel.text = levelName;
+    static NSString *CellIdentifier = @"levelCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+    }
+    
+    cell.backgroundColor = [UIColor colorWithRed:UI_2_RED green:UI_2_GREEN blue:UI_2_BLUE alpha:1.0];
+    cell.textLabel.textColor = levelColor;
+    cell.textLabel.text = [levelName stringByReplacingOccurrencesOfString:@"_" withString:@" "];;
     cell.textLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
     
     //set detail text based on completion status
     cell.detailTextLabel.font = [UIFont fontWithName:FONT_NAME size:DETAIL_FONT_SIZE];
     if ([words[1] isEqualToString:@"NO"]) {
-        cell.detailTextLabel.text = @" - Incomplete";
+        cell.detailTextLabel.text = @"~Incomplete";
         cell.detailTextLabel.textColor = [UIColor redColor];
     }else{
-        cell.detailTextLabel.text = @" - Completed";
+        cell.detailTextLabel.text = @"~Completed";
         cell.detailTextLabel.textColor = [UIColor greenColor];
     }
     
