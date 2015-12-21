@@ -1,12 +1,9 @@
 Easy_Beginnings NO
 Hoops NO
 Keep_a_Beat NO
-Hills_and_Valleys NO
 Mt._Kanchenjunga NO
 Hoops_2 NO
 Keep_a_Beat_2 NO
-Valleys_and_Hills NO
 Mt._Everest NO
-Hoops_3 NO
-Keep_a_Beat_3 NO
+Hills_and_Valleys NO
 Alps NO

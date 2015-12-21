@@ -14,12 +14,13 @@
     self = [super init];
     if (self) {
         _frame = frame;
-        _velocity = CGPointMake(0.0, 0.0);
+        _velocity = CGPointMake(0.0, 0.0); //init velocity to zero
     }
     return self;
 }
 
 -(void)update{
+    //add velocity vector to frame position vector
     _frame.origin.x += _velocity.x;
     _frame.origin.y += _velocity.y;
 }

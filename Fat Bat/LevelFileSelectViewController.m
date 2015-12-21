@@ -1,14 +1,14 @@
 //
-//  LevelSelectViewController.m
+//  LevelFileSelectViewController.m
 //  Fat Bat
 //
-//  Created by Wil Pirino on 12/15/15.
+//  Created by Wil Pirino on 12/19/15.
 //  Copyright © 2015 Wil Pirino. All rights reserved.
 //
 
-#import "LevelSelectViewController.h"
+#import "LevelFileSelectViewController.h"
 
-@implementation LevelSelectViewController{
+@implementation LevelFileSelectViewController{
     NSArray<NSString *> *_lines;
 }
 
@@ -35,7 +35,26 @@
     
     //show navigation bar and set title
     self.navigationController.navigationBarHidden = NO;
-    self.title = @"Select a Level";
+    self.title = @"Select a File";
+    
+    //add new bar button to navigation bar
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"new" style:UIBarButtonItemStyleDone target:self action:@selector(new)];
+}
+
+-(void)new{
+    //load new level file from bundle
+    NSString *path = [[NSBundle mainBundle] pathForResource:[@"levels/" stringByAppendingString:NEW_LEVEL_FILE_NAME] ofType:@"txt"];
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    
+    //prefix level name to levelstring
+    NSString *text = [NEW_LEVEL_FILE_NAME stringByAppendingString:@"\r"];
+    text = [text stringByAppendingString:string];
+    
+    //init game controller with level name
+    LevelCreationViewController *viewController = [[LevelCreationViewController alloc] initWithText:text];
+    
+    // Push view controller
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 
@@ -52,7 +71,7 @@
     NSArray *words = [_lines[indexPath.row] componentsSeparatedByString:@" "];
     NSString *levelName = words[0];
     
-
+    
     //load level file and spereate into lines
     NSString *levelFile = [LevelFileHandler levelWithName:levelName];
     NSArray *lines = [LevelFileHandler getLinesFromLevelFile:levelFile];
@@ -66,7 +85,7 @@
     static NSString *CellIdentifier = @"levelCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     //configure table cell
@@ -74,16 +93,6 @@
     cell.textLabel.textColor = levelColor;
     cell.textLabel.text = [levelName stringByReplacingOccurrencesOfString:@"_" withString:@" "];;
     cell.textLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
-    
-    //set detail text based on completion status
-    cell.detailTextLabel.font = [UIFont fontWithName:FONT_NAME size:DETAIL_FONT_SIZE];
-    if ([words[1] isEqualToString:@"NO"]) {
-        cell.detailTextLabel.text = @"~Incomplete";
-        cell.detailTextLabel.textColor = [UIColor redColor];
-    }else{
-        cell.detailTextLabel.text = @"~Completed";
-        cell.detailTextLabel.textColor = [UIColor greenColor];
-    }
     
     return cell;
 }
@@ -94,11 +103,18 @@
     NSArray *words = [_lines[indexPath.row] componentsSeparatedByString:@" "];
     NSString *levelName = words[0];
     
+    //load file
+    NSString *levelString = [LevelFileHandler levelWithName:levelName];
+    
+    //prefix level name to levelstring
+    NSString *text = [levelName stringByAppendingString:@"\r"];
+    text = [text stringByAppendingString:levelString];
+    
     //init game controller with level name
-    GameViewController *gameViewController = [[GameViewController alloc] initWithLevelName:levelName];
+    LevelCreationViewController *viewController = [[LevelCreationViewController alloc] initWithText:text];
     
     // Push view controller
-    [self.navigationController pushViewController:gameViewController animated:YES];
+    [self.navigationController pushViewController:viewController animated:YES];
 }
 
 @end

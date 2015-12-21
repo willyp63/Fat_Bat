@@ -43,16 +43,11 @@
         
         
         //load file and spereate into lines
-        NSString *string = [LevelFileHandler levelWithName:levelName];
-        NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        
-        //get number of stalagmite
-        _numStalagmite = 0;
-        for (int i = 2; i < lines.count; i++) {
-            if ([lines[i] characterAtIndex:0] != '#') {_numStalagmite++;}
-        }
+        NSString *levelFile = [LevelFileHandler levelWithName:levelName];
+        NSArray *lines = [LevelFileHandler getLinesFromLevelFile:levelFile];
         
         //init stalagmite location array
+        _numStalagmite = (int)lines.count - 2;
         _stalagmiteLocations = (CGPoint *)malloc(sizeof(CGPoint)*_numStalagmite);
         _nextStalagmiteIndex = 0;
         
@@ -265,7 +260,7 @@
 }
 
 
--(void)addNewCharacters{
+-(void)addNewStalagmite{
     //add new stalagmite while _time is equal to the x value of the next location
     while(_nextStalagmiteIndex < _numStalagmite && _time > _stalagmiteLocations[_nextStalagmiteIndex].x - 1.0){
         //get y value
@@ -293,7 +288,7 @@
     }
 }
 
--(void)removeCharacters{
+-(void)removeStalagmite{
     //remove stalagmite off left side of screen
     for (int i = 0; i < _stalagmite.count; i++) {
         GameObjectModel *stalagmiteObject = _stalagmite[i];

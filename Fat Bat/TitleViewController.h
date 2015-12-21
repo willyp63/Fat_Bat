@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "LevelFileHandler.h"
 #import "LevelSelectViewController.h"
+#import "LevelFileSelectViewController.h"
+#import "MyButton.h"
 
-@interface TitleViewController : UIViewController
+@interface TitleViewController : UIViewController <MyButtonResponder>
 
 @end

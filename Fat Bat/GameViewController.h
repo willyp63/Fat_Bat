@@ -7,21 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+
+#import "UIDefinitions.h"
 #import "LevelFileHandler.h"
+#import "MyButton.h"
 #import "BatView.h"
 #import "StalagmiteView.h"
 #import "FinishLineView.h"
 #import "GameModel.h"
 
-@interface GameViewController : UIViewController
+@interface GameViewController : UIViewController <MyButtonResponder>
 
 -(id)initWithLevelName:(NSString *)levelName;
 
 @property NSString *levelName;
 
 @property UIButton *holdButton;
-@property UIButton *pauseButton;
-@property UIButton *quitButton;
+@property MyButton *pauseButton;
+@property MyButton *quitButton;
 
 @property UIView *caveFloorView;
 @property UIView *caveCeilingView;

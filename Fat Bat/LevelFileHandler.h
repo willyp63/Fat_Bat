@@ -7,15 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "UIDefinitions.h"
+#import "GameDefinitions.h"
 
-#define LEVEL_FOLDER @"levels/"
 
 @interface LevelFileHandler : NSObject
 
-+(NSString *)levelWithName:(NSString *)levelName;
-+(void)setLevelComplete:(NSString *)levelName;
+
 +(NSString *)levelsFile;
-+(void)resetLevelsFile;
++(NSString *)levelWithName:(NSString *)levelName;
+
++(NSArray *)getLinesFromLevelFile:(NSString *)string;
+
++(void)writeLevelsToDocuments;
++(void)writeLevelFile:(NSString *)string withName:(NSString *)levelName;
+
++(NSString *)isValidLevelFile:(NSString *)string;
+
++(void)setLevelComplete:(NSString *)levelName;
+
 
 @end

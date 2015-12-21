@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "LevelFileHandler.h"
 #import "GameViewController.h"
 
 @interface LevelSelectViewController : UITableViewController
-
-@property NSArray<NSString *> *lines;
 
 @end

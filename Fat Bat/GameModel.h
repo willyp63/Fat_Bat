@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+
 #import "LevelFileHandler.h"
 #import "GameObjectModel.h"
 #import "GameDefinitions.h"
 
+//definitions used to size UIDefintions for other screen sizes
 #define IPHONE_6S_CAVE_WIDTH 667.0
 #define IPHONE_6S_CAVE_HEIGHT 355.0
 
+//game states
 typedef enum gameState{
     IN_PROGRESS, GAME_OVER, LEVEL_COMPLETE, PAUSED
 }GameState;
@@ -21,13 +24,12 @@ typedef enum gameState{
 
 @interface GameModel : NSObject
 
-
 -(id)initWithCaveFrame:(CGRect)caveFrame levelName:(NSString *)levelName;
 
 -(void)update;
 
--(void)addNewCharacters;
--(void)removeCharacters;
+-(void)addNewStalagmite;
+-(void)removeStalagmite;
 
 
 @property CGFloat time;

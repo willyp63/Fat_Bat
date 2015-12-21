@@ -8,16 +8,18 @@
 
 #import "GameViewController.h"
 
-@implementation GameViewController
+@implementation GameViewController{
+    BOOL _quitGame;
+}
 
 -(id)initWithLevelName:(NSString *)levelName{
     self = [super init];
     if (self) {
         _levelName = levelName;
+        _quitGame = NO;
     }
     return self;
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -59,12 +61,16 @@
     UIColor *innerCaveColor = [UIColor colorWithRed:_model.colorRGBValues[0].floatValue/3.0 green:_model.colorRGBValues[1].floatValue/3.0 blue:_model.colorRGBValues[2].floatValue/3.0 alpha:1.0];
     UIColor *shadowCaveColor = [UIColor colorWithRed:_model.colorRGBValues[0].floatValue/1.5 green:_model.colorRGBValues[1].floatValue/1.5 blue:_model.colorRGBValues[2].floatValue/1.5 alpha:1.0];
     
+    
     //set bg color
     self.view.backgroundColor = _outerCaveColor;
     
-    //init cave view and add to root view
+    
+    //init cave view
     CGRect caveViewFrame = CGRectMake(caveFrame.origin.x - BORDER_WIDTH*2.0, caveFrame.origin.y, caveFrame.size.width + BORDER_WIDTH*4.0, caveFrame.size.height);
     UIView *caveView = [[UIView alloc] initWithFrame:caveViewFrame];
+    
+    //add gradient layer
     CAGradientLayer *caveLayer = [CAGradientLayer layer];
     caveLayer.frame = caveView.bounds;
     caveLayer.borderWidth = BORDER_WIDTH*2.0;
@@ -72,15 +78,18 @@
     caveLayer.colors = [NSArray arrayWithObjects:(id)shadowCaveColor.CGColor, (id)innerCaveColor.CGColor, (id)innerCaveColor.CGColor, (id)shadowCaveColor.CGColor, nil];
     caveLayer.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.0], [NSNumber numberWithFloat:0.45], [NSNumber numberWithFloat:0.55], nil];
     [caveView.layer addSublayer:caveLayer];
+    
+    //add cave view to root view
     [self.view addSubview:caveView];
     
-    //init finish line view and layer
+    
+    //init finish line view and add to root view
     CGRect finishLineFrame = CGRectMake(_model.finishLine, caveFrame.origin.y + BORDER_WIDTH*2.0, _model.subDivisionSize, caveFrame.size.height - BORDER_WIDTH*4.0);
     _finishLineView = [[FinishLineView alloc] initWithFrame:finishLineFrame numberOfColumns:FINISH_LINE_NUM_COLUMNS];
     [self.view addSubview:_finishLineView];
     
     
-    //create bat view and add to root view
+    //init bat view and add to root view
     _batView = [[BatView alloc] initWithFrame:_model.bat.frame borderWidth:BORDER_WIDTH];
     [self.view addSubview:_batView];
     
@@ -105,83 +114,61 @@
     [_holdButton addTarget:self action:@selector(fingerUp) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_holdButton];
     
+    
     //init and add quit button to root view
     CGRect quitButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
-    _quitButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _quitButton.frame = quitButtonFrame;
-    _quitButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
-    _quitButton.layer.borderWidth = BORDER_WIDTH;
-    _quitButton.layer.borderColor = [UIColor blackColor].CGColor;
-    _quitButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
-    [_quitButton addTarget:self action:@selector(quitGame) forControlEvents:UIControlEventTouchDown];
+    _quitButton = [[MyButton alloc] initWithFrame:quitButtonFrame cornerRadius:BUTTON_CORNER_RADIUS borderWidth:BORDER_WIDTH color:[UIColor whiteColor] text:@"quit" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE] responder:self];
     [self.view addSubview:_quitButton];
-    
-    //init and add label to quit button view
-    UILabel *quitButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, quitButtonFrame.size.width, quitButtonFrame.size.height)];
-    quitButtonLabel.text = @"quit";
-    quitButtonLabel.textAlignment = NSTextAlignmentCenter;
-    quitButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
-    [_quitButton addSubview:quitButtonLabel];
     
     //init and add pause button to root view
     CGRect pauseButtonFrame = CGRectMake(quitButtonFrame.origin.x - GAME_BUTTON_WIDTH - GAME_BUTTON_OFFSET, GAME_BUTTON_OFFSET + statusBarHeight, GAME_BUTTON_WIDTH, GAME_BUTTON_HEIGHT);
-    _pauseButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _pauseButton.frame = pauseButtonFrame;
-    _pauseButton.layer.cornerRadius = BUTTON_CORNER_RADIUS;
-    _pauseButton.layer.borderWidth = BORDER_WIDTH;
-    _pauseButton.layer.borderColor = [UIColor blackColor].CGColor;
-    _pauseButton.layer.backgroundColor = [UIColor whiteColor].CGColor;
-    [_pauseButton addTarget:self action:@selector(pauseGame) forControlEvents:UIControlEventTouchDown];
+    _pauseButton = [[MyButton alloc] initWithFrame:pauseButtonFrame cornerRadius:BUTTON_CORNER_RADIUS borderWidth:BORDER_WIDTH color:[UIColor whiteColor] text:@"pause" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE] responder:self];
     [self.view addSubview:_pauseButton];
-    
-    //init and add label to pause button view
-    UILabel *pauseButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, pauseButtonFrame.size.width, pauseButtonFrame.size.height)];
-    pauseButtonLabel.text = @"pause";
-    pauseButtonLabel.textAlignment = NSTextAlignmentCenter;
-    pauseButtonLabel.font = [UIFont fontWithName:FONT_NAME size:FONT_SIZE];
-    [_pauseButton addSubview:pauseButtonLabel];
     
     
     //start update timer
     _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
 }
 
-
--(void)pauseGame{
-    //if game is paused
-    if (_model.state == PAUSED) {
-        //set state to in progress
-        [_model setState:IN_PROGRESS];
-        
-        //clear hold button's bg
-        _holdButton.backgroundColor = [UIColor clearColor];
-        
-        //start update timer
-        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
-    }else{
-        //set state to paused
-        [_model setState:PAUSED];
-        
-        //set opaque layer over cave views
-        _holdButton.backgroundColor = [UIColor colorWithRed:OPAQUE_RED green:OPAQUE_GREEN blue:OPAQUE_BLUE alpha:OPAQUE_ALPHA];
-        
-        //stop update timer
-        [_updateTimer invalidate];
+-(void)buttonPressed:(MyButton *)button{
+    //QUIT BUTTON PRESSED
+    if ([button.text isEqualToString:@"quit"]) {
+        //quit game
+        [self quitGame];
+    }
+    //PAUSE BUTTON PRESSED
+    else if ([button.text isEqualToString:@"pause"]) {
+        //if game is paused
+        if (_model.state == PAUSED) {
+            //set state to in progress
+            [_model setState:IN_PROGRESS];
+            
+            //clear hold button's bg
+            _holdButton.backgroundColor = [UIColor clearColor];
+            
+            //start update timer
+            _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
+        }else{
+            //set state to paused
+            [_model setState:PAUSED];
+            
+            //set opaque layer over cave views
+            _holdButton.backgroundColor = [UIColor colorWithRed:OPAQUE_RED green:OPAQUE_GREEN blue:OPAQUE_BLUE alpha:OPAQUE_ALPHA];
+            
+            //stop update timer
+            [_updateTimer invalidate];
+        }
     }
 }
 
 -(void)quitGame{
+    _quitGame = YES;
+    
     //pop view controller
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)levelComplete{
-    //update levels file
-    [LevelFileHandler setLevelComplete:_levelName];
-    
-    [self quitGame];
-}
-
+//hold button target methods
 -(void)fingerDown{[self setIsDiving:YES];}
 -(void)fingerUp{[self setIsDiving:NO];}
 
@@ -207,36 +194,60 @@
     
     //check for level complete
     if(_model.state == LEVEL_COMPLETE){
-        [self levelComplete];
+        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"CONGRATS!" message:@"level complete" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                                //dismiss alert view
+                                [alert dismissViewControllerAnimated:YES completion:nil];
+            
+                                //update levels file
+                                [LevelFileHandler setLevelComplete:_levelName];
+            
+                                //quit game
+                                [self quitGame];
+                             }];
+        [alert addAction:ok];
+        
+        if (!_quitGame) {
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        
         return;
     }
     
     
-    //remove stalagmite
+    //remove stalagmite views
     for (int i = 0; i < _stalagmiteViews.count; i++) {
         UIView *stalagmiteView = _stalagmiteViews[i];
         
+        //remove if view is off the screen to the left
         if (stalagmiteView.frame.origin.x + stalagmiteView.frame.size.width < _model.caveFrame.origin.x) {
             [stalagmiteView removeFromSuperview];
             [_stalagmiteViews removeObjectAtIndex:i--];
         }
     }
-    [_model removeCharacters];
+    //remove stalagmite model
+    [_model removeStalagmite];
     
     
-    //add new stalagmite
-    [_model addNewCharacters];
+    //add new stalagmite models
+    [_model addNewStalagmite];
+    
+    //add new stalagmite views for new models
     for (int i = (int)_stalagmiteViews.count; i < (int)_model.stalagmite.count; i++) {
         GameObjectModel *stalagmiteObject = _model.stalagmite[i];
         
+        //create view
         BOOL facingDown = (stalagmiteObject.frame.origin.y == _model.caveFrame.origin.y);
         StalagmiteView *stalagmiteView = [[StalagmiteView alloc] initWithFrame:stalagmiteObject.frame color:_outerCaveColor borderWidth:BORDER_WIDTH facingDown:facingDown];
         
+        //add view
         [self.view addSubview:stalagmiteView];
         [_stalagmiteViews addObject:stalagmiteView];
     }
     
-    //bring ui views in front of new views
+    
+    //bring ui and ceiling/floor views in front of new stalagmite views
     [self.view bringSubviewToFront:_caveFloorView];
     [self.view bringSubviewToFront:_caveCeilingView];
     [self.view bringSubviewToFront:_holdButton];
@@ -257,6 +268,7 @@
         [_batView setIsDiving:_model.isDiving];
     }
     
+    
     //check for bounce
     if (_model.didBounce) {
         //calc animation times
@@ -266,7 +278,7 @@
         //make bounce rect
         CGRect bounceFrame = CGRectMake(_model.bat.frame.origin.x, _model.bounceFrameY, _model.bat.frame.size.width, _model.bat.frame.size.height);
         
-        //animate bat moving to bounce frame then new frame
+        //animate bat moving to bounce frame, then new frame
         [UIView animateWithDuration:timeToBounceFrame delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
             _batView.frame = bounceFrame;
         }completion:^(BOOL finished){
@@ -283,15 +295,18 @@
         }completion:NULL];
     }
     
+    
     //update stalagmite views
     for (int i = 0; i < _stalagmiteViews.count; i++) {
         UIView *stalagmiteView = _stalagmiteViews[i];
         GameObjectModel *stalagmiteObject = _model.stalagmite[i];
         
+        //move to new frame
         [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
             stalagmiteView.frame = stalagmiteObject.frame;
         }completion:NULL];
     }
+    
     
     //update finish line view
     [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
