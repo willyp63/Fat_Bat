@@ -15,6 +15,8 @@
 
 -(id)initWithFrame:(CGRect)frame cornerRadius:(CGFloat)cornerRadius borderWidth:(CGFloat)borderWidth color:(UIColor *)color text:(NSString *)text font:(UIFont *)font responder:(id <MyButtonResponder>)responder;
 
+-(void)setToggle:(BOOL)toggle;
+
 @property id <MyButtonResponder> responder;
 
 @property CGFloat cornerRadius;
@@ -22,6 +24,9 @@
 @property UIColor *color;
 @property NSString *text;
 @property UIFont *font;
+
+@property BOOL isToggleButton;
+@property BOOL toggleState;
 
 @end
 

@@ -25,8 +25,17 @@
 }
 
 +(NSString *)levelWithName:(NSString *)levelName{
+    //get documents path
+    NSString *docPath = [self documentsPathForFileName:levelName];
+    
+    //check if documents file exists
+    if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
+        NSLog(@"No level file found with name %@", levelName);
+        exit(1);
+    }
+    
     //return contents of file
-    return [NSString stringWithContentsOfFile:[self documentsPathForFileName:levelName] encoding:NSUTF8StringEncoding error:nil];
+    return [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
 }
 
 
@@ -38,9 +47,11 @@
     NSString *lines[allLines.count];
     int numLines = 0;
     
-    //fill c array with all lines not beginning with comment prefix
+    //fill c array with all valid lines
     for (int i = 0; i < allLines.count; i++) {
-        if (![allLines[i] hasPrefix:COMMENT_LINE_PREFIX]) {
+        //check if line doesnt begins with comment prefix and is not a blank line
+        if ([allLines[i] length] > 0 && ![allLines[i] hasPrefix:COMMENT_LINE_PREFIX]) {
+            //add line to c array
             lines[numLines] = allLines[i];
             numLines++;
         }
@@ -59,7 +70,16 @@
     //get lines
     NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     for (int i = 0; i < lines.count; i++) {
+        //seperate into words
         NSArray *words = [lines[i] componentsSeparatedByString:@" "];
+        
+        //check for correct number of arguments on line
+        if (words.count != 2) {
+            NSLog(@"levels file has the wrong number of arguments on line %d", i);
+            exit(1);
+        }
+        
+        //get level name from first argument
         NSString *levelName = words[0];
         
         //copy level file
@@ -73,12 +93,21 @@
     [string writeToFile:[self documentsPathForFileName:levelName] atomically:NO encoding:NSUTF8StringEncoding error:nil];
     
     //get levels file and seperate into lines
-    NSString *levelsString = [NSString stringWithContentsOfFile:[self documentsPathForFileName:LEVELS_FILE_NAME] encoding:NSUTF8StringEncoding error:nil];
+    NSString *levelsString = [self levelsFile];
     NSArray *lines = [levelsString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
     //search for a line with the same name
     for (int i = 0; i < lines.count; i++) {
+        //seperate into words
         NSArray *words = [lines[i] componentsSeparatedByString:@" "];
+        
+        //check for correct number of arguments on line
+        if (words.count != 2) {
+            NSLog(@"levels file has the wrong number of arguments on line %d", i);
+            exit(1);
+        }
+        
+        //get line name from first argument
         NSString *lineName = words[0];
         
         //if the names match return
@@ -86,8 +115,9 @@
             return;
         }
     }
+    //there is no level with the same name
     
-    //append new level
+    //append new line to levels string
     levelsString = [levelsString stringByAppendingString:@"\r"];
     levelsString = [levelsString stringByAppendingString:levelName];
     levelsString = [levelsString stringByAppendingString:@" NO"];
@@ -101,7 +131,7 @@
     NSArray *lines = [self getLinesFromLevelFile:string];
     
     //check that there are at least two lines
-    if (lines.count < 2) {
+    if (lines.count < 3) {
         return @"too few lines";
     }
     
@@ -112,13 +142,13 @@
         if (i == 0) {
             //check num args
             if (words.count != 1) {
-                return @"wrong number of arguements on line 1";
+                return @"wrong number of arguments on line 1";
             }else{
                 float arg1 = [words[0] floatValue];
                 
                 //check arg1
-                if(arg1 < 0.0){
-                    return @"invalid arguement on line 1";
+                if(arg1 < 0){
+                    return @"invalid argument on line 1";
                 }
             }
         }
@@ -126,7 +156,7 @@
         else if(i == 1){
             //check num args
             if (words.count != 3) {
-                return @"wrong number of arguements on line 2";
+                return @"wrong number of arguments on line 2";
             }else{
                 float arg1 = [words[0] floatValue];
                 float arg2 = [words[1] floatValue];
@@ -134,7 +164,21 @@
                 
                 //check arg1
                 if(arg1 < 0.0 || arg1 > 255.0 || arg2 < 0.0 || arg2 > 255.0 || arg3 < 0.0 || arg3 > 255.0){
-                    return @"invalid arguement on line 2";
+                    return @"invalid argument on line 2";
+                }
+            }
+        }
+        //third line
+        else if(i == 2){
+            //check num args
+            if (words.count != 1) {
+                return @"wrong number of arguments on line 3";
+            }else{
+                float arg1 = [words[0] floatValue];
+                
+                //check arg1
+                if(arg1 < 0 || arg1 < 2){
+                    return @"invalid argument on line 2";
                 }
             }
         }
@@ -142,19 +186,20 @@
         else{
             //check num args
             if (words.count != 2) {
-                return [NSString stringWithFormat:@"wrong number of arguements on line %d", i];
+                return [NSString stringWithFormat:@"wrong number of arguments on line %d", i + 1];
             }else{
                 float arg1 = [words[0] floatValue];
                 float arg2 = [words[1] floatValue];
                 
                 //check arg1
                 if(arg1 < 0.0 || arg2 < 2 - NUMBER_OF_CAVE_DIVISIONS || arg2 > NUMBER_OF_CAVE_DIVISIONS - 2){
-                    return [NSString stringWithFormat:@"invalid arguement on line %d", i];
+                    return [NSString stringWithFormat:@"invalid argument on line %d", i + 1];
                 }
             }
         }
     }
     
+    //return empty string, meaing there was no errors
     return @"";
 }
 
@@ -192,7 +237,7 @@
             
             //write to file
             [string writeToFile:[self documentsPathForFileName:LEVELS_FILE_NAME] atomically:NO encoding:NSUTF8StringEncoding error:nil];
-            break;
+            return;
         }
     }
 }

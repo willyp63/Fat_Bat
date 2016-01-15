@@ -13,4 +13,6 @@
 
 @interface LevelFileSelectViewController : UITableViewController
 
+@property NSArray<NSString *> *lines;
+
 @end

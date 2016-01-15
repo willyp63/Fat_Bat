@@ -8,10 +8,7 @@
 
 #import "LevelCreationViewController.h"
 
-@implementation LevelCreationViewController{
-    UITextView *_textView;
-    NSString *_text;
-}
+@implementation LevelCreationViewController
 
 -(id)initWithText:(NSString *)text{
     self = [super init];
@@ -91,6 +88,21 @@
     //get lines from text view
     NSArray *lines = [_textView.text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
+    //check number of lines
+    if (lines.count < 1) {
+        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"ERROR" message:@"too few lines" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            //dismiss alert view
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+    
     //get level name from first line
     NSString *levelName = lines[0];
     
@@ -118,8 +130,6 @@
     
     //check if there is no error
     if ([message isEqualToString:@""]) {
-        
-        
         //write level file
         [LevelFileHandler writeLevelFile:levelFile withName:levelName];
         

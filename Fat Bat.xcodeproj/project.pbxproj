@@ -19,12 +19,17 @@
 		4635C69A1C21F96E006CF4D5 /* StalagmiteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4635C6991C21F96E006CF4D5 /* StalagmiteView.m */; };
 		463EE2021C24F55100824907 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 463EE2011C24F55100824907 /* levels */; };
 		463EE20E1C24FA1A00824907 /* LevelFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 463EE20D1C24FA1A00824907 /* LevelFileHandler.m */; };
+		467145DB1C319A0A008001DC /* ProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145DA1C319A0A008001DC /* ProgressBarView.m */; };
+		467145DE1C3B0599008001DC /* TitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145DD1C3B0599008001DC /* TitleView.m */; };
+		467145E11C3B1030008001DC /* CheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145E01C3B1030008001DC /* CheckMarkView.m */; };
+		467145E31C3F7D48008001DC /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 467145E21C3F7D48008001DC /* audio */; };
 		4674F6021C1CB04D00701996 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6011C1CB04D00701996 /* main.m */; };
 		4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6041C1CB04D00701996 /* AppDelegate.m */; };
 		4674F6081C1CB04D00701996 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6071C1CB04D00701996 /* GameViewController.m */; };
 		4674F60B1C1CB04D00701996 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4674F6091C1CB04D00701996 /* Main.storyboard */; };
 		4674F60D1C1CB04D00701996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4674F60C1C1CB04D00701996 /* Assets.xcassets */; };
 		4674F6101C1CB04D00701996 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4674F60E1C1CB04D00701996 /* LaunchScreen.storyboard */; };
+		468B99BE1C44213900272FFD /* AudioHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 468B99BD1C44213900272FFD /* AudioHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,9 +54,16 @@
 		4635C6981C21F96E006CF4D5 /* StalagmiteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StalagmiteView.h; sourceTree = "<group>"; };
 		4635C6991C21F96E006CF4D5 /* StalagmiteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StalagmiteView.m; sourceTree = "<group>"; };
 		4635C69B1C223D99006CF4D5 /* UIDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIDefinitions.h; sourceTree = "<group>"; };
-		463EE2011C24F55100824907 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
+		463EE2011C24F55100824907 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; name = levels; path = "Fat Bat/levels"; sourceTree = "<group>"; };
 		463EE20C1C24FA1A00824907 /* LevelFileHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelFileHandler.h; sourceTree = "<group>"; };
 		463EE20D1C24FA1A00824907 /* LevelFileHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelFileHandler.m; sourceTree = "<group>"; };
+		467145D91C319A0A008001DC /* ProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarView.h; sourceTree = "<group>"; };
+		467145DA1C319A0A008001DC /* ProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBarView.m; sourceTree = "<group>"; };
+		467145DC1C3B0599008001DC /* TitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleView.h; sourceTree = "<group>"; };
+		467145DD1C3B0599008001DC /* TitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleView.m; sourceTree = "<group>"; };
+		467145DF1C3B1030008001DC /* CheckMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckMarkView.h; sourceTree = "<group>"; };
+		467145E01C3B1030008001DC /* CheckMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckMarkView.m; sourceTree = "<group>"; };
+		467145E21C3F7D48008001DC /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = "Fat Bat/audio"; sourceTree = "<group>"; };
 		4674F5FD1C1CB04D00701996 /* Fat Bat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fat Bat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4674F6011C1CB04D00701996 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4674F6031C1CB04D00701996 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -63,6 +75,8 @@
 		4674F60F1C1CB04D00701996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4674F6111C1CB04D00701996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4677BCEF1C23244200886115 /* GameDefinitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameDefinitions.h; sourceTree = "<group>"; };
+		468B99BC1C44213900272FFD /* AudioHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioHandler.h; sourceTree = "<group>"; };
+		468B99BD1C44213900272FFD /* AudioHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioHandler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,14 +95,11 @@
 			children = (
 				460569531C20B46D00D60E0E /* TitleViewController.h */,
 				460569541C20B46D00D60E0E /* TitleViewController.m */,
-				4612371E1C25FF8900E09FDD /* LevelFileSelectViewController.h */,
-				4612371F1C25FF8900E09FDD /* LevelFileSelectViewController.m */,
-				4612371B1C25D5C900E09FDD /* LevelCreationViewController.h */,
-				4612371C1C25D5C900E09FDD /* LevelCreationViewController.m */,
 				460569491C208B2900D60E0E /* LevelSelectViewController.h */,
 				4605694A1C208B2900D60E0E /* LevelSelectViewController.m */,
 				4674F6061C1CB04D00701996 /* GameViewController.h */,
 				4674F6071C1CB04D00701996 /* GameViewController.m */,
+				468B99BF1C442D1600272FFD /* level creation vcs */,
 			);
 			name = VCs;
 			sourceTree = "<group>";
@@ -104,6 +115,12 @@
 				4635C6951C21F42C006CF4D5 /* FinishLineView.m */,
 				461237181C251B4700E09FDD /* MyButton.h */,
 				461237191C251B4700E09FDD /* MyButton.m */,
+				467145D91C319A0A008001DC /* ProgressBarView.h */,
+				467145DA1C319A0A008001DC /* ProgressBarView.m */,
+				467145DC1C3B0599008001DC /* TitleView.h */,
+				467145DD1C3B0599008001DC /* TitleView.m */,
+				467145DF1C3B1030008001DC /* CheckMarkView.h */,
+				467145E01C3B1030008001DC /* CheckMarkView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -115,8 +132,6 @@
 				460569371C1DEDB100D60E0E /* GameModel.m */,
 				460569391C1DEF9000D60E0E /* GameObjectModel.h */,
 				4605693A1C1DEF9000D60E0E /* GameObjectModel.m */,
-				463EE20C1C24FA1A00824907 /* LevelFileHandler.h */,
-				463EE20D1C24FA1A00824907 /* LevelFileHandler.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -134,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				4674F5FF1C1CB04D00701996 /* Fat Bat */,
+				468B99BA1C441FCF00272FFD /* Resources */,
 				4674F5FE1C1CB04D00701996 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -153,9 +169,9 @@
 				4674F6041C1CB04D00701996 /* AppDelegate.m */,
 				461237171C251ACA00E09FDD /* Definitions */,
 				461237141C251A6800E09FDD /* VCs */,
+				468B99BB1C4420BB00272FFD /* Resource Management */,
 				461237161C251A9A00E09FDD /* Model */,
 				461237151C251A8600E09FDD /* Views */,
-				463EE2011C24F55100824907 /* levels */,
 				4674F6091C1CB04D00701996 /* Main.storyboard */,
 				4674F60C1C1CB04D00701996 /* Assets.xcassets */,
 				4674F60E1C1CB04D00701996 /* LaunchScreen.storyboard */,
@@ -171,6 +187,37 @@
 				4674F6011C1CB04D00701996 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		468B99BA1C441FCF00272FFD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				467145E21C3F7D48008001DC /* audio */,
+				463EE2011C24F55100824907 /* levels */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		468B99BB1C4420BB00272FFD /* Resource Management */ = {
+			isa = PBXGroup;
+			children = (
+				463EE20C1C24FA1A00824907 /* LevelFileHandler.h */,
+				463EE20D1C24FA1A00824907 /* LevelFileHandler.m */,
+				468B99BC1C44213900272FFD /* AudioHandler.h */,
+				468B99BD1C44213900272FFD /* AudioHandler.m */,
+			);
+			name = "Resource Management";
+			sourceTree = "<group>";
+		};
+		468B99BF1C442D1600272FFD /* level creation vcs */ = {
+			isa = PBXGroup;
+			children = (
+				4612371E1C25FF8900E09FDD /* LevelFileSelectViewController.h */,
+				4612371F1C25FF8900E09FDD /* LevelFileSelectViewController.m */,
+				4612371B1C25D5C900E09FDD /* LevelCreationViewController.h */,
+				4612371C1C25D5C900E09FDD /* LevelCreationViewController.m */,
+			);
+			name = "level creation vcs";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,6 +251,7 @@
 				TargetAttributes = {
 					4674F5FC1C1CB04D00701996 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = QG82K9N32Q;
 					};
 				};
 			};
@@ -230,6 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				467145E31C3F7D48008001DC /* audio in Resources */,
 				4674F6101C1CB04D00701996 /* LaunchScreen.storyboard in Resources */,
 				463EE2021C24F55100824907 /* levels in Resources */,
 				4674F60D1C1CB04D00701996 /* Assets.xcassets in Resources */,
@@ -247,10 +296,14 @@
 				4612371D1C25D5C900E09FDD /* LevelCreationViewController.m in Sources */,
 				4674F6081C1CB04D00701996 /* GameViewController.m in Sources */,
 				460569551C20B46D00D60E0E /* TitleViewController.m in Sources */,
+				467145E11C3B1030008001DC /* CheckMarkView.m in Sources */,
+				467145DE1C3B0599008001DC /* TitleView.m in Sources */,
 				460569381C1DEDB100D60E0E /* GameModel.m in Sources */,
 				4612371A1C251B4700E09FDD /* MyButton.m in Sources */,
+				468B99BE1C44213900272FFD /* AudioHandler.m in Sources */,
 				4635C6961C21F42C006CF4D5 /* FinishLineView.m in Sources */,
 				4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */,
+				467145DB1C319A0A008001DC /* ProgressBarView.m in Sources */,
 				4605693B1C1DEF9000D60E0E /* GameObjectModel.m in Sources */,
 				463EE20E1C24FA1A00824907 /* LevelFileHandler.m in Sources */,
 				461237201C25FF8900E09FDD /* LevelFileSelectViewController.m in Sources */,
@@ -367,10 +420,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Fat Bat/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wpirino.Fat-Bat";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -379,10 +436,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Fat Bat/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wpirino.Fat-Bat";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -20,6 +20,9 @@
         _font = font;
         _responder = responder;
         
+        _toggleState = NO;
+        _isToggleButton = NO;
+        
         //set layer
         self.layer.borderWidth = _borderWidth;
         self.layer.cornerRadius = _cornerRadius;
@@ -37,12 +40,31 @@
     return self;
 }
 
+-(void)setToggle:(BOOL)toggle{
+    _toggleState = toggle;
+    if (_toggleState) {
+        self.layer.backgroundColor = [UIColor grayColor].CGColor;
+    }else{
+        [self unhighlight];
+    }
+}
+
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    //highlight button
-    self.layer.backgroundColor = [UIColor grayColor].CGColor;
-    
-    //unhighlight after delay
-    [self performSelector:@selector(unhighlight) withObject:Nil afterDelay:0.18];
+    if (_isToggleButton) {
+        if (_toggleState) {
+            [self unhighlight];
+        }else{
+            //highlight button
+            self.layer.backgroundColor = [UIColor grayColor].CGColor;
+        }
+        _toggleState = !_toggleState;
+    }else{
+        //highlight button
+        self.layer.backgroundColor = [UIColor grayColor].CGColor;
+        
+        //unhighlight after delay
+        [self performSelector:@selector(unhighlight) withObject:Nil afterDelay:0.18];
+    }
     
     //call responder method
     [_responder buttonPressed:self];

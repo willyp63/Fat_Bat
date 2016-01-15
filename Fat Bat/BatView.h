@@ -7,16 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-//bat body color
-#define BODY_RED 125.0/255.0
-#define BODY_GREEN 102.0/255.0
-#define BODY_BLUE 255.0/255.0
-
-//bat ear and wing color
-#define EAR_WING_RED 255.0/255.0
-#define EAR_WING_GREEN 176.0/255.0
-#define EAR_WING_BLUE 255.0/255.0
+#import "UIDefinitions.h"
 
 
 @interface BatView : UIView

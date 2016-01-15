@@ -7,24 +7,35 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 #import "UIDefinitions.h"
 #import "LevelFileHandler.h"
+#import "AudioHandler.h"
 #import "MyButton.h"
 #import "BatView.h"
 #import "StalagmiteView.h"
 #import "FinishLineView.h"
+#import "ProgressBarView.h"
 #import "GameModel.h"
+
 
 @interface GameViewController : UIViewController <MyButtonResponder>
 
--(id)initWithLevelName:(NSString *)levelName;
+
+-(id)initWithLevelName:(NSString *)levelName audioHandler:(AudioHandler *)audioHandler;
+
 
 @property NSString *levelName;
 
 @property UIButton *holdButton;
 @property MyButton *pauseButton;
 @property MyButton *quitButton;
+
+@property MyButton *musicButton;
+@property MyButton *soundButton;
+
+@property ProgressBarView *progressBar;
 
 @property UIView *caveFloorView;
 @property UIView *caveCeilingView;
@@ -38,6 +49,9 @@
 
 @property GameModel *model;
 @property NSTimer *updateTimer;
+
+@property AudioHandler *audioHandler;
+
 
 @end
 

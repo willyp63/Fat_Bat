@@ -9,10 +9,19 @@
 #import <UIKit/UIKit.h>
 
 #import "LevelFileHandler.h"
+#import "AudioHandler.h"
 #import "LevelSelectViewController.h"
 #import "LevelFileSelectViewController.h"
 #import "MyButton.h"
+#import "TitleView.h"
 
 @interface TitleViewController : UIViewController <MyButtonResponder>
+
+@property MyButton *resetButton;
+
+@property AudioHandler *audioHandler;
+
+@property MyButton *musicButton;
+@property MyButton *soundButton;
 
 @end

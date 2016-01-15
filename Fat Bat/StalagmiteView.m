@@ -18,33 +18,31 @@
         CGFloat radius = self.bounds.size.width/2.0;
         
         if (facingDown) {
-            [path addArcWithCenter:CGPointMake(-radius, radius) radius:radius startAngle:M_PI*3.0/2.0 endAngle:M_PI*2.0 clockwise:YES];
-            
-            //[path moveToPoint:CGPointMake(0.0, radius)];
-            [path addLineToPoint:CGPointMake(0.0, self.bounds.size.height - radius)];
-            
-            [path addArcWithCenter:CGPointMake(radius, self.bounds.size.height - radius) radius:radius startAngle:M_PI endAngle:M_PI*2.0 clockwise:NO];
-            
-            //[path moveToPoint:CGPointMake(self.bounds.size.width, self.bounds.size.height - radius)];
-            [path addLineToPoint:CGPointMake(self.bounds.size.width, radius)];
-            
-            [path addArcWithCenter:CGPointMake(self.bounds.size.width + radius, radius) radius:radius startAngle:M_PI endAngle:M_PI*3.0/2.0 clockwise:YES];
+            [path moveToPoint:CGPointMake(-radius/2.0, borderWidth - 1.0)];
+            [path addLineToPoint:CGPointMake(-radius/2.0, borderWidth)];
+            [path addArcWithCenter:CGPointMake(-radius/2.0, radius/2.0 + borderWidth) radius:radius/2.0 startAngle:M_PI*3.0/2.0 endAngle:M_PI*2.0 clockwise:YES];
+            [path addLineToPoint:CGPointMake(0.0, self.bounds.size.height - radius/2.0)];
+            [path addArcWithCenter:CGPointMake(radius/2.0, self.bounds.size.height - radius/2.0) radius:radius/2.0 startAngle:M_PI endAngle:M_PI/2.0 clockwise:NO];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width - radius/2.0, self.bounds.size.height)];
+            [path addArcWithCenter:CGPointMake(self.bounds.size.width - radius/2.0, self.bounds.size.height - radius/2.0) radius:radius/2.0 startAngle:M_PI/2.0 endAngle:0.0 clockwise:NO];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width, radius/2.0 + borderWidth)];
+            [path addArcWithCenter:CGPointMake(self.bounds.size.width + radius/2.0, radius/2.0 + borderWidth) radius:radius/2.0 startAngle:M_PI endAngle:M_PI*3.0/2.0 clockwise:YES];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width + radius/2.0, borderWidth - 1.0)];
         }else{
-            [path addArcWithCenter:CGPointMake(-radius, self.bounds.size.height - radius) radius:radius startAngle:M_PI/2.0 endAngle:0.0 clockwise:NO];
-            
-            //[path moveToPoint:CGPointMake(0.0, radius)];
-            [path addLineToPoint:CGPointMake(0.0, radius)];
-            
-            [path addArcWithCenter:CGPointMake(radius, radius) radius:radius startAngle:M_PI endAngle:0.0 clockwise:YES];
-            
-            //[path moveToPoint:CGPointMake(self.bounds.size.width, self.bounds.size.height - radius)];
-            [path addLineToPoint:CGPointMake(self.bounds.size.width, self.bounds.size.height - radius)];
-            
-            [path addArcWithCenter:CGPointMake(self.bounds.size.width + radius, self.bounds.size.height - radius) radius:radius startAngle:M_PI endAngle:M_PI/2.0 clockwise:NO];
+            [path moveToPoint:CGPointMake(-radius/2.0, self.bounds.size.height - borderWidth + 1.0)];
+            [path addLineToPoint:CGPointMake(-radius/2.0, self.bounds.size.height - borderWidth)];
+            [path addArcWithCenter:CGPointMake(-radius/2.0, self.bounds.size.height - radius/2.0 - borderWidth) radius:radius/2.0 startAngle:M_PI/2.0 endAngle:0.0 clockwise:NO];
+            [path addLineToPoint:CGPointMake(0.0, radius/2.0)];
+            [path addArcWithCenter:CGPointMake(radius/2.0, radius/2.0) radius:radius/2.0 startAngle:M_PI endAngle:M_PI*3.0/2.0 clockwise:YES];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width - radius/2.0, 0.0)];
+            [path addArcWithCenter:CGPointMake(self.bounds.size.width - radius/2.0, radius/2.0) radius:radius/2.0 startAngle:M_PI*3.0/2.0 endAngle:M_PI*2.0 clockwise:YES];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width, self.bounds.size.height - radius/2.0 - borderWidth)];
+            [path addArcWithCenter:CGPointMake(self.bounds.size.width + radius/2.0, self.bounds.size.height - radius/2.0 - borderWidth) radius:radius/2.0 startAngle:M_PI endAngle:M_PI/2.0 clockwise:NO];
+            [path addLineToPoint:CGPointMake(self.bounds.size.width + radius/2.0, self.bounds.size.height - borderWidth + 1.0)];
         }
     
         
-        //create ear layer and add to root layer
+        //create shape layer and add to root layer
         CAShapeLayer *shapeLayer = [CAShapeLayer layer];
         shapeLayer.path = path.CGPath;
         shapeLayer.position = CGPointMake(0.0, 0.0);

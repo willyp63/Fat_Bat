@@ -24,7 +24,7 @@
 
 
 //time between game updates
-#define UPDATE_TIME_INTERVAL 0.15
+#define UPDATE_TIME_INTERVAL 0.16
 
 
 //number of rows in the cave

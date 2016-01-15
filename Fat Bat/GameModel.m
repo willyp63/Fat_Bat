@@ -20,11 +20,10 @@
         
         //get forces and velocity based on ratio to iphone 6s
         CGFloat yRatio = _caveFrame.size.height / IPHONE_6S_CAVE_HEIGHT;
-        _flyingVelocity = FLYING_VELOCITY * (_caveFrame.size.width / IPHONE_6S_CAVE_WIDTH);
+        _flyingVelocity = FLYING_VELOCITY * yRatio;
         _gravityForce = GRAVITY_FORCE * yRatio;
         _diveForce = DIVE_FORCE * yRatio;
         _terminalYVelocity = TERMINAL_Y_VELOCITY * yRatio;
-        
         
         //bat view frame
         CGRect batFrame = CGRectMake(caveFrame.origin.x + _subDivisionSize, caveFrame.origin.y + _subDivisionSize, _subDivisionSize, _subDivisionSize);
@@ -38,16 +37,21 @@
         _isDiving = NO;
         _time = 0.0;
         
+        
         //init finishLine
         _finishLine = caveFrame.origin.x + caveFrame.size.width;
         
+        
+        //get xDiff based on difference to iphone 6s
+        CGFloat iphone6sSubDivisionSize = IPHONE_6S_CAVE_HEIGHT/NUMBER_OF_CAVE_DIVISIONS;
+        CGFloat xDiff = (IPHONE_6S_CAVE_WIDTH/iphone6sSubDivisionSize) - (_caveFrame.size.width/_subDivisionSize);
         
         //load file and spereate into lines
         NSString *levelFile = [LevelFileHandler levelWithName:levelName];
         NSArray *lines = [LevelFileHandler getLinesFromLevelFile:levelFile];
         
         //init stalagmite location array
-        _numStalagmite = (int)lines.count - 2;
+        _numStalagmite = (int)lines.count - 3;
         _stalagmiteLocations = (CGPoint *)malloc(sizeof(CGPoint)*_numStalagmite);
         _nextStalagmiteIndex = 0;
         
@@ -55,14 +59,17 @@
         _stalagmite = [[NSMutableArray alloc] initWithCapacity:_numStalagmite];
         
         //get finish time from first line
-        _finishTime = [lines[0] intValue];
+        _finishTime = [lines[0] intValue] + xDiff;
         
         //get color from line 2
         NSArray *rgbValues = [lines[1] componentsSeparatedByString:@" "];
         _colorRGBValues = [NSArray arrayWithObjects:[NSNumber numberWithFloat:[rgbValues[0] floatValue]/255.0], [NSNumber numberWithFloat:[rgbValues[1] floatValue]/255.0], [NSNumber numberWithFloat:[rgbValues[2] floatValue]/255.0], nil];
         
+        //get music num from line 3
+        _songNum = [lines[2] intValue];
+        
         //add a location for each remaining line
-        for (int i = 2; i < lines.count; i++) {
+        for (int i = 3; i < lines.count; i++) {
             if ([lines[i] characterAtIndex:0] == '#'){continue;}
             
             //seperate line into words
@@ -70,7 +77,7 @@
             NSArray *words = [line componentsSeparatedByString:@" "];
             
             //add location
-            _stalagmiteLocations[_nextStalagmiteIndex].x = [words[0] intValue];
+            _stalagmiteLocations[_nextStalagmiteIndex].x = [words[0] intValue] + xDiff;
             _stalagmiteLocations[_nextStalagmiteIndex].y = [words[1] intValue];
             _nextStalagmiteIndex++;
         }
@@ -164,30 +171,45 @@
         _didBounce = NO;
     }
     
-    //check for stalagmite collisions and update stalagmite
+    //update stalagmite
     for (int i = 0; i < _stalagmite.count; i++) {
         GameObjectModel *stalagmiteObject = _stalagmite[i];
         [stalagmiteObject update];
-        
+    }
+    
+    //check for stalagmite collisions
+    for (int i = 0; i < _stalagmite.count; i++) {
+        GameObjectModel *stalagmiteObject = _stalagmite[i];
         if ([self batIntersects:stalagmiteObject]){
             _state = GAME_OVER;
+            break;
         }
     }
     
-    //update finish line
-    if (_time >= _finishTime) {
+    
+    //update finishline
+    if (_time > _finishTime) {
         _finishLine -= _flyingVelocity;
+    }else if(_time > _finishTime - 1.0){ 
+        //calc x offset
+        CGFloat xOffset = (_finishTime - _time)*_subDivisionSize;
         
-        if (_bat.frame.origin.x + _bat.frame.size.width > _finishLine) {
-            _state = LEVEL_COMPLETE;
-        }
+        _finishLine += xOffset;
+        _finishLine -= _subDivisionSize/4.0;
+    }
+    
+    //check if bat crossed finish
+    if (_bat.frame.origin.x + _bat.frame.size.width > _finishLine) {
+        _state = LEVEL_COMPLETE;
     }
 }
 
 
 -(BOOL)batIntersects:(GameObjectModel *)stalagmite{
     //if the bat's new frame (taken as a circle) intersects the stalagmite, return YES
-    if ([self circle:_bat.frame intersectsRect:stalagmite.frame]) {return  YES;}
+    if ([self circle:_bat.frame intersectsRect:stalagmite.frame]) {
+        return  YES;
+    }
     
     
     //get bat's old frame
@@ -221,8 +243,12 @@
         CGPoint bottomRightPoint = CGPointMake(stalagmite.frame.origin.x + stalagmite.frame.size.width, stalagmite.frame.origin.y + stalagmite.frame.size.height);
         
         //if either corner's x value is between p1.x and p2.x, and the corner is below the line (p1, p2), then return YES
-        if (bottomLeftPoint.x > p1.x && bottomLeftPoint.x < p2.x && bottomLeftPoint.y - p1.y >= m * (bottomLeftPoint.x - p1.x)) {return YES;}
-        if (bottomRightPoint.x > p1.x && bottomRightPoint.x < p2.x && bottomRightPoint.y - p1.y >= m * (bottomRightPoint.x - p1.x)) {return YES;}
+        if (bottomLeftPoint.x > p1.x && bottomLeftPoint.x < p2.x && bottomLeftPoint.y - p1.y >= m * (bottomLeftPoint.x - p1.x)) {
+            return YES;
+        }
+        if (bottomRightPoint.x > p1.x && bottomRightPoint.x < p2.x && bottomRightPoint.y - p1.y >= m * (bottomRightPoint.x - p1.x)) {
+            return YES;
+        }
     }
     //stalagmite is upward facing
     else{
@@ -231,8 +257,12 @@
         CGPoint topRightPoint = CGPointMake(stalagmite.frame.origin.x + stalagmite.frame.size.width, stalagmite.frame.origin.y);
         
         //if either corner's x value is between p1.x and p2.x, and the corner is above the line (p1, p2), then return YES
-        if (topLeftPoint.x > p1.x && topLeftPoint.x < p2.x && topLeftPoint.y - p1.y <= m * (topLeftPoint.x - p1.x)) {return YES;}
-        if (topRightPoint.x > p1.x && topRightPoint.x < p2.x && topRightPoint.y - p1.y <= m * (topRightPoint.x - p1.x)) {return YES;}
+        if (topLeftPoint.x > p1.x && topLeftPoint.x < p2.x && topLeftPoint.y - p1.y <= m * (topLeftPoint.x - p1.x)) {
+            return YES;
+        }
+        if (topRightPoint.x > p1.x && topRightPoint.x < p2.x && topRightPoint.y - p1.y <= m * (topRightPoint.x - p1.x)) {
+            return YES;
+        }
     }
     
     return NO;

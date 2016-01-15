@@ -13,6 +13,9 @@
 
 @interface LevelCreationViewController : UIViewController <UITextViewDelegate>
 
+@property UITextView *textView;
+@property NSString *text;
+
 -(id)initWithText:(NSString *)text;
 
 @end
