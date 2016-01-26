@@ -33,7 +33,7 @@
 @property (assign) BOOL backgroundMusicPlaying;
 
 
-@property (assign) SystemSoundID *sounds;
+@property (strong, nonatomic) NSMutableArray<AVAudioPlayer *> *sounds;
 @property (assign) int numSounds;
 
 @property BOOL soundToggle;

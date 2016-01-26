@@ -53,7 +53,7 @@
         }
         
         //alloc spcae for sound id's
-        _sounds = (SystemSoundID *)malloc(sizeof(SystemSoundID)*NUM_SUPPORTED_SOUNDS);
+        _sounds = [[NSMutableArray alloc] initWithCapacity:6];
         _numSounds = 0;
     }
     return self;
@@ -63,6 +63,7 @@
     //init audio player
     _audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
     _audioPlayer.numberOfLoops = -1;
+    [_audioPlayer prepareToPlay];
 }
 
 - (void)tryPlayMusic {
@@ -87,9 +88,12 @@
 }
 
 -(int)addSoundURL:(NSURL *)URL{
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)URL, _sounds + _numSounds);
-    _numSounds++;
+    //init audio player
+    AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
+    [audioPlayer prepareToPlay];
+    [_sounds addObject:audioPlayer];
     
+    _numSounds++;
     return _numSounds - 1;
 }
 
@@ -100,12 +104,12 @@
     }
     
     //play sound
-    AudioServicesPlaySystemSound(*(_sounds + soundNum));
+    [[_sounds objectAtIndex:soundNum] play];
 }
 
 -(void)removeAllSounds{
     //alloc spcae for sound id's
-    _sounds = (SystemSoundID *)malloc(sizeof(SystemSoundID)*NUM_SUPPORTED_SOUNDS);
+    _sounds = [[NSMutableArray alloc] initWithCapacity:6];
     _numSounds = 0;
 }
 

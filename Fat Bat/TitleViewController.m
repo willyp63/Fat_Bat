@@ -15,7 +15,7 @@
     
     //play music
     _audioHandler = [[AudioHandler alloc] init];
-    [_audioHandler setMusicURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"audio/fatbat_title_song" ofType:@"mp3"]]];
+    [_audioHandler setMusicURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"audio/fatbat_title_song" ofType:@"caf"]]];
     [_audioHandler.audioPlayer setVolume:0.25];
     
     if(_audioHandler.musicToggle){
@@ -49,13 +49,19 @@
     
     
     //init and add title lable
-    CGRect titleViewFrame = CGRectMake((screenSize.width - TITLE_LABEL_WIDTH*scaleX)/2.0, statusBarHeight + screenSize.height/4.0 - TITLE_LABEL_HEIGHT*scaleY/2.0, TITLE_LABEL_WIDTH*scaleX, TITLE_LABEL_HEIGHT*scaleY);
+    CGRect titleViewFrame = CGRectMake((screenSize.width - TITLE_LABEL_WIDTH*scaleX)/2.0 - TITLE_LABEL_WIDTH/10.0, statusBarHeight + screenSize.height/4.0 - TITLE_LABEL_HEIGHT*scaleY/2.0, TITLE_LABEL_WIDTH*scaleX, TITLE_LABEL_HEIGHT*scaleY);
     TitleView *titleView = [[TitleView alloc] initWithFrame:titleViewFrame text:@"Fat Bat" font:[UIFont fontWithName:FONT_NAME size:TITLE_FONT_SIZE*scaleX] color:[UIColor colorWithRed:UI_2_RED green:UI_2_GREEN blue:UI_2_BLUE alpha:1.0] borderWidth:BORDER_WIDTH*scaleY];
     [self.view addSubview:titleView];
     
+    //init and add subtitle lable
+    CGRect subtitleViewFrame = CGRectMake((screenSize.width - TITLE_LABEL_WIDTH*scaleX)/2.0 + TITLE_LABEL_WIDTH/10.0, titleViewFrame.origin.y + titleViewFrame.size.height + GAME_BUTTON_OFFSET*scaleY, TITLE_LABEL_WIDTH*scaleX, SUBTITLE_LABEL_HEIGHT*scaleY);
+    TitleView *subtitleView = [[TitleView alloc] initWithFrame:subtitleViewFrame text:@"and the Colored Caverns" font:[UIFont fontWithName:FONT_NAME size:SUBTITLE_FONT_SIZE*scaleX] color:[UIColor colorWithRed:UI_2_RED green:UI_2_GREEN blue:UI_2_BLUE alpha:1.0] borderWidth:BORDER_WIDTH*scaleY];
+    [subtitleView alternateColors:@[[UIColor redColor], [UIColor greenColor], [UIColor blueColor], [UIColor yellowColor]]];
+    [self.view addSubview:subtitleView];
+    
     
     //init play button and add to root view
-    CGRect playButtonFrame = CGRectMake((screenSize.width - PLAY_BUTTON_WIDTH*scaleX)/2.0, statusBarHeight + screenSize.height*5.0/8.0 - PLAY_BUTTON_HEIGHT*scaleY/2.0, PLAY_BUTTON_WIDTH*scaleX, PLAY_BUTTON_HEIGHT*scaleY);
+    CGRect playButtonFrame = CGRectMake((screenSize.width - PLAY_BUTTON_WIDTH*scaleX)/2.0, subtitleViewFrame.origin.y + subtitleViewFrame.size.height + GAME_BUTTON_OFFSET*scaleY*4.0, PLAY_BUTTON_WIDTH*scaleX, PLAY_BUTTON_HEIGHT*scaleY);
     MyButton *playButton = [[MyButton alloc] initWithFrame:playButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"play" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
     [self.view addSubview:playButton];
     
@@ -77,18 +83,17 @@
     [self.view addSubview:_soundButton];
     
     
-    //init reset button and add to root view
-    CGRect resetButtonFrame = CGRectMake(GAME_BUTTON_OFFSET*scaleX, GAME_BUTTON_OFFSET*scaleY + statusBarHeight, GAME_BUTTON_WIDTH*scaleX, GAME_BUTTON_HEIGHT*scaleY);
-    MyButton *resetButton = [[MyButton alloc] initWithFrame:resetButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"reset" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleX] responder:self];
-    [self.view addSubview:resetButton];
     
-     
-    /*
+    //init reset button and add to root view
+    CGRect resetButtonFrame = CGRectMake(GAME_BUTTON_OFFSET*scaleY, GAME_BUTTON_OFFSET*scaleY + statusBarHeight, GAME_BUTTON_WIDTH*scaleY, GAME_BUTTON_HEIGHT*scaleY);
+    MyButton *resetButton = [[MyButton alloc] initWithFrame:resetButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"rs" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
+    //[self.view addSubview:resetButton];
+    
+    
     //init create button and add to root view
-    CGRect createButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH*scaleX - GAME_BUTTON_OFFSET*scaleX, GAME_BUTTON_OFFSET*scaleY + statusBarHeight, GAME_BUTTON_WIDTH*scaleX, GAME_BUTTON_HEIGHT*scaleY);
-    MyButton *createButton = [[MyButton alloc] initWithFrame:createButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"create" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleX] responder:self];
-    [self.view addSubview:createButton];
-    */
+    CGRect createButtonFrame = CGRectMake(resetButtonFrame.origin.x + resetButtonFrame.size.width + GAME_BUTTON_OFFSET*scaleY, resetButtonFrame.origin.y, GAME_BUTTON_WIDTH*scaleY, GAME_BUTTON_HEIGHT*scaleY);
+    MyButton *createButton = [[MyButton alloc] initWithFrame:createButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"cr" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
+    //[self.view addSubview:createButton];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -121,12 +126,12 @@
         }
     }
     //RESET BUTTON PRESSED
-    else if ([button.text isEqualToString:@"reset"]) {
+    else if ([button.text isEqualToString:@"rs"]) {
         //reset levels file
         [LevelFileHandler writeLevelsToDocuments];
     }
     //CREATE BUTTON PRESSED
-    else if ([button.text isEqualToString:@"create"]) {
+    else if ([button.text isEqualToString:@"cr"]) {
         // Push level creation view controller
         [self.navigationController pushViewController:[[LevelFileSelectViewController alloc] init] animated:YES];
     }

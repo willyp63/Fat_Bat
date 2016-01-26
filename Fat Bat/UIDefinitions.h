@@ -22,7 +22,7 @@
 
 
 //buttons
-#define BUTTON_CORNER_RADIUS 8.0
+#define BUTTON_CORNER_RADIUS 10.0
 
 #define GAME_BUTTON_OFFSET 5.0
 #define GAME_BUTTON_WIDTH 40.0
@@ -39,14 +39,17 @@
 
 
 //Fat Bat label
-#define TITLE_LABEL_WIDTH 500.0
-#define TITLE_LABEL_HEIGHT 350.0
+#define TITLE_LABEL_WIDTH 600.0
+#define TITLE_LABEL_HEIGHT 128.0
+#define SUBTITLE_LABEL_HEIGHT 40.0
 
 
 //fonts
-#define FONT_NAME @"HelveticaNeue-Bold"
+#define FONT_NAME @"ChalkboardSE-Bold"
 #define FONT_SIZE 32.0
+#define TABLE_TITLE_FONT_SIZE 24.0
 #define TITLE_FONT_SIZE 128.0
+#define SUBTITLE_FONT_SIZE 40.0
 
 
 //ui colors

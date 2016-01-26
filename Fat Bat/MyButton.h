@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TitleView.h"
 
 @protocol MyButtonResponder;
 

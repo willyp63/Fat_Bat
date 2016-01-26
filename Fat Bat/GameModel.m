@@ -189,13 +189,7 @@
     
     //update finishline
     if (_time > _finishTime) {
-        _finishLine -= _flyingVelocity;
-    }else if(_time > _finishTime - 1.0){ 
-        //calc x offset
-        CGFloat xOffset = (_finishTime - _time)*_subDivisionSize;
-        
-        _finishLine += xOffset;
-        _finishLine -= _subDivisionSize/4.0;
+        _finishLine = _caveFrame.origin.x + _caveFrame.size.width - (_time + 0.25 - _finishTime)*_subDivisionSize;
     }
     
     //check if bat crossed finish
@@ -292,7 +286,7 @@
 
 -(void)addNewStalagmite{
     //add new stalagmite while _time is equal to the x value of the next location
-    while(_nextStalagmiteIndex < _numStalagmite && _time > _stalagmiteLocations[_nextStalagmiteIndex].x - 1.0){
+    while(_nextStalagmiteIndex < _numStalagmite && _time > _stalagmiteLocations[_nextStalagmiteIndex].x - (_flyingVelocity / _subDivisionSize)){
         //get y value
         int y = _stalagmiteLocations[_nextStalagmiteIndex].y;
         

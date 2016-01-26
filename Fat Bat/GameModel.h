@@ -53,7 +53,7 @@ typedef enum gameState{
 @property int numStalagmite;
 @property CGPoint *stalagmiteLocations;
 
-@property int finishTime;
+@property CGFloat finishTime;
 
 @property NSArray <NSNumber *>*colorRGBValues;
 

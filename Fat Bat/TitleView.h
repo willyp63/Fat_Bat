@@ -12,4 +12,6 @@
 
 -(id)initWithFrame:(CGRect)frame text:(NSString *)text font:(UIFont *)font color:(UIColor *)color borderWidth:(CGFloat)borderWidth;
 
+-(void)alternateColors:(NSArray<UIColor *> *)colors;
+
 @end

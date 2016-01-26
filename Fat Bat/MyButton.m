@@ -30,7 +30,7 @@
         self.layer.backgroundColor = _color.CGColor;
         
         //add text label
-        UILabel *textLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, _font.descender/3.0, self.bounds.size.width, self.bounds.size.height)];
         textLabel.backgroundColor = [UIColor clearColor];
         textLabel.text = _text;
         textLabel.textAlignment = NSTextAlignmentCenter;

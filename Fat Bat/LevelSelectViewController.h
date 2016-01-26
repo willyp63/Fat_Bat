@@ -12,7 +12,7 @@
 #import "AudioHandler.h"
 #import "GameViewController.h"
 #import "TitleView.h"
-#import "CheckMarkView.h"
+#import "ShapeMarkerView.h"
 
 @interface LevelSelectViewController : UITableViewController
 

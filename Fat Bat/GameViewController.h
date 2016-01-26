@@ -25,6 +25,8 @@
 
 -(id)initWithLevelName:(NSString *)levelName audioHandler:(AudioHandler *)audioHandler;
 
+-(void)pause;
+
 
 @property NSString *levelName;
 

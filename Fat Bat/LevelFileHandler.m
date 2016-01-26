@@ -177,8 +177,8 @@
                 float arg1 = [words[0] floatValue];
                 
                 //check arg1
-                if(arg1 < 0 || arg1 < 2){
-                    return @"invalid argument on line 2";
+                if(arg1 < 0 || arg1 > 2){
+                    return @"invalid argument on line 3";
                 }
             }
         }

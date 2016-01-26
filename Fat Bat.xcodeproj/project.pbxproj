@@ -21,7 +21,7 @@
 		463EE20E1C24FA1A00824907 /* LevelFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 463EE20D1C24FA1A00824907 /* LevelFileHandler.m */; };
 		467145DB1C319A0A008001DC /* ProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145DA1C319A0A008001DC /* ProgressBarView.m */; };
 		467145DE1C3B0599008001DC /* TitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145DD1C3B0599008001DC /* TitleView.m */; };
-		467145E11C3B1030008001DC /* CheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145E01C3B1030008001DC /* CheckMarkView.m */; };
+		467145E11C3B1030008001DC /* ShapeMarkerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 467145E01C3B1030008001DC /* ShapeMarkerView.m */; };
 		467145E31C3F7D48008001DC /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 467145E21C3F7D48008001DC /* audio */; };
 		4674F6021C1CB04D00701996 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6011C1CB04D00701996 /* main.m */; };
 		4674F6051C1CB04D00701996 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4674F6041C1CB04D00701996 /* AppDelegate.m */; };
@@ -61,8 +61,8 @@
 		467145DA1C319A0A008001DC /* ProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBarView.m; sourceTree = "<group>"; };
 		467145DC1C3B0599008001DC /* TitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleView.h; sourceTree = "<group>"; };
 		467145DD1C3B0599008001DC /* TitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleView.m; sourceTree = "<group>"; };
-		467145DF1C3B1030008001DC /* CheckMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckMarkView.h; sourceTree = "<group>"; };
-		467145E01C3B1030008001DC /* CheckMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CheckMarkView.m; sourceTree = "<group>"; };
+		467145DF1C3B1030008001DC /* ShapeMarkerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShapeMarkerView.h; sourceTree = "<group>"; };
+		467145E01C3B1030008001DC /* ShapeMarkerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShapeMarkerView.m; sourceTree = "<group>"; };
 		467145E21C3F7D48008001DC /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = "Fat Bat/audio"; sourceTree = "<group>"; };
 		4674F5FD1C1CB04D00701996 /* Fat Bat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fat Bat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4674F6011C1CB04D00701996 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -119,8 +119,8 @@
 				467145DA1C319A0A008001DC /* ProgressBarView.m */,
 				467145DC1C3B0599008001DC /* TitleView.h */,
 				467145DD1C3B0599008001DC /* TitleView.m */,
-				467145DF1C3B1030008001DC /* CheckMarkView.h */,
-				467145E01C3B1030008001DC /* CheckMarkView.m */,
+				467145DF1C3B1030008001DC /* ShapeMarkerView.h */,
+				467145E01C3B1030008001DC /* ShapeMarkerView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -296,7 +296,7 @@
 				4612371D1C25D5C900E09FDD /* LevelCreationViewController.m in Sources */,
 				4674F6081C1CB04D00701996 /* GameViewController.m in Sources */,
 				460569551C20B46D00D60E0E /* TitleViewController.m in Sources */,
-				467145E11C3B1030008001DC /* CheckMarkView.m in Sources */,
+				467145E11C3B1030008001DC /* ShapeMarkerView.m in Sources */,
 				467145DE1C3B0599008001DC /* TitleView.m in Sources */,
 				460569381C1DEDB100D60E0E /* GameModel.m in Sources */,
 				4612371A1C251B4700E09FDD /* MyButton.m in Sources */,
@@ -423,7 +423,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Fat Bat/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wpirino.Fat-Bat";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -439,7 +439,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Fat Bat/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wpirino.Fat-Bat";
 				PRODUCT_NAME = "$(TARGET_NAME)";

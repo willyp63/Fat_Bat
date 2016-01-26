@@ -24,7 +24,7 @@
 
 
 //time between game updates
-#define UPDATE_TIME_INTERVAL 0.16
+#define UPDATE_TIME_INTERVAL 0.1
 
 
 //number of rows in the cave
@@ -32,15 +32,15 @@
 
 
 //forces
-#define GRAVITY_FORCE 3.0
-#define DIVE_FORCE 10.0
+#define GRAVITY_FORCE 1.25
+#define DIVE_FORCE 5.0
 
 
 //scroll speed of game
-#define FLYING_VELOCITY 30.0
+#define FLYING_VELOCITY 18.75
 
 //max veritical velocity
-#define TERMINAL_Y_VELOCITY 100.0
+#define TERMINAL_Y_VELOCITY 75.0
 
 
 #endif /* GameDefinitions_h */

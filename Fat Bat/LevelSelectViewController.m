@@ -39,13 +39,17 @@
     
     //show navigation bar and set title
     self.navigationController.navigationBarHidden = NO;
-    self.title = @"Pick a Cave";
+    self.title = @"Pick a Cavern";
+    
+    //set title font
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:FONT_NAME size:TABLE_TITLE_FONT_SIZE], NSFontAttributeName, nil];
+    self.navigationController.navigationBar.titleTextAttributes = attributes;
     
     
     //play music if not doing so
     if ( !_audioHandler.backgroundMusicPlaying) {
         //play music
-        [_audioHandler setMusicURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"audio/fatbat_title_song" ofType:@"mp3"]]];
+        [_audioHandler setMusicURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"audio/fatbat_title_song" ofType:@"caf"]]];
         [_audioHandler tryPlayMusic];
     }
     
@@ -120,14 +124,14 @@
     
     //add level title to cell
     levelName = [levelName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    CGRect levelTitleFrame = CGRectMake(0.0, -1.0, screenSize.width*4.0/5.0, self.tableView.rowHeight);
+    CGRect levelTitleFrame = CGRectMake(0.0, -self.tableView.rowHeight/4.0, screenSize.width*4.0/5.0, self.tableView.rowHeight + self.tableView.rowHeight/4.0);
     TitleView *levelTitle = [[TitleView alloc] initWithFrame:levelTitleFrame text:levelName font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*yScale] color:levelColor borderWidth:BORDER_WIDTH*yScale/2.0];
     [cell addSubview:levelTitle];
     
     
     //add check mark if level complete
     if ([words[1] isEqualToString:@"YES"]) {
-        CheckMarkView *checkMark = [[CheckMarkView alloc] initWithFrame:CGRectMake((screenSize.width*4.0/5.0) - cell.bounds.size.height/2.0, -1.0, self.tableView.rowHeight, self.tableView.rowHeight) borderWidth:BORDER_WIDTH*yScale/2.0];
+        ShapeMarkerView *checkMark = [[ShapeMarkerView alloc] initWithFrame:CGRectMake((screenSize.width*4.0/5.0) - cell.bounds.size.height/2.0, -1.0, self.tableView.rowHeight, self.tableView.rowHeight) shape:CHECK_MARK borderWidth:BORDER_WIDTH*yScale/2.0];
         [cell addSubview:checkMark];
     }
     
