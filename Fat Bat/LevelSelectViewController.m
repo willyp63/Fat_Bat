@@ -39,7 +39,7 @@
     
     //show navigation bar and set title
     self.navigationController.navigationBarHidden = NO;
-    self.title = @"Pick a Cavern";
+    self.title = @"Choose a Cavern";
     
     //set title font
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:FONT_NAME size:TABLE_TITLE_FONT_SIZE], NSFontAttributeName, nil];
@@ -58,6 +58,38 @@
     NSString *string = [LevelFileHandler levelsFile];
     _lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     
+    //check if congrats on all levels complete has been shown
+    if ([_lines[0] isEqualToString:@"NO"]) {
+        
+        //check if all levels are complete
+        BOOL allLevelsComplete = YES;
+        for (int i = 1; i < _lines.count; i++){
+            NSArray <NSString *> *words = [_lines[i] componentsSeparatedByString:@" "];
+            if ([words[1] isEqualToString:@"NO"]) {
+                allLevelsComplete = NO;
+                break;
+            }
+        }
+        
+        if (allLevelsComplete) {
+            //write to levels file
+            NSString *newLevelsString = @"YES";
+            for (int i = 1; i < _lines.count; i++){
+                newLevelsString = [newLevelsString stringByAppendingString:@"\n"];
+                newLevelsString = [newLevelsString stringByAppendingString:_lines[i]];
+            }
+            [LevelFileHandler writeLevelsFile:newLevelsString];
+            
+            //init congrats alert view and present it
+            UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"Way To Go!" message:@"all caverns complete" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+                //dismiss alert view
+                [alert dismissViewControllerAnimated:YES completion:nil];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    
     //reload table's data
     [self.tableView reloadData];
 }
@@ -68,12 +100,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _lines.count; //one row for each level
+    return _lines.count - 1; //one row for each level
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //seperate line into words
-    NSArray *words = [_lines[indexPath.row] componentsSeparatedByString:@" "];
+    NSArray *words = [_lines[indexPath.row + 1] componentsSeparatedByString:@" "];
     
     //check for correct number of arguments on line
     if (words.count != 2) {
@@ -163,7 +195,7 @@
     
     
     //get level name
-    NSArray *words = [_lines[indexPath.row] componentsSeparatedByString:@" "];
+    NSArray *words = [_lines[indexPath.row + 1] componentsSeparatedByString:@" "];
     
     //check for correct number of arguments on line
     if (words.count != 2) {

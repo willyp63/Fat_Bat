@@ -16,7 +16,6 @@
         _cornerRadius = cornerRadius;
         _borderWidth = borderWidth;
         _color = color;
-        _text = text;
         _font = font;
         _responder = responder;
         
@@ -30,12 +29,12 @@
         self.layer.backgroundColor = _color.CGColor;
         
         //add text label
-        UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, _font.descender/3.0, self.bounds.size.width, self.bounds.size.height)];
-        textLabel.backgroundColor = [UIColor clearColor];
-        textLabel.text = _text;
-        textLabel.textAlignment = NSTextAlignmentCenter;
-        textLabel.font = _font;
-        [self addSubview:textLabel];
+        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, _font.descender/3.0, self.bounds.size.width, self.bounds.size.height)];
+        _textLabel.backgroundColor = [UIColor clearColor];
+        _textLabel.text = text;
+        _textLabel.textAlignment = NSTextAlignmentCenter;
+        _textLabel.font = _font;
+        [self addSubview:_textLabel];
     }
     return self;
 }

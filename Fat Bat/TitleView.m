@@ -43,6 +43,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     if (!_alternateColors) {
+        //draw outlined text
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:_font, NSFontAttributeName, _color, NSForegroundColorAttributeName, nil];
         CGSize textSize = [[[NSAttributedString alloc] initWithString:_text attributes:attributes] size];
     
@@ -58,9 +59,12 @@
         CGContextSetLineWidth(ctx, _borderWidth);
         [_text drawAtPoint:drawPoint withAttributes:attributes];
     }else{
+        //draw text alternating colors
         NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:_font, NSFontAttributeName, _color, NSForegroundColorAttributeName, nil];
         CGSize textSize = [[[NSAttributedString alloc] initWithString:_text attributes:attributes] size];
         CGFloat letterX = (rect.size.width - textSize.width)/2.0;
+        
+        int colorIdx = 0;
         
         for (int i = 0; i < _text.length; i++) {
             NSString *letter = [_text substringWithRange:NSMakeRange(i, 1)];
@@ -68,7 +72,7 @@
             CGPoint drawPoint = CGPointMake(letterX, (rect.size.height - textSize.height)/2.0);
             letterX += [[NSAttributedString alloc] initWithString:letter attributes:attributes].size.width;
             
-            attributes = [NSDictionary dictionaryWithObjectsAndKeys:_font, NSFontAttributeName, _colors[i%_colors.count], NSForegroundColorAttributeName, nil];
+            attributes = [NSDictionary dictionaryWithObjectsAndKeys:_font, NSFontAttributeName, _colors[colorIdx%_colors.count], NSForegroundColorAttributeName, nil];
             CGContextSetTextDrawingMode(ctx, kCGTextFill);
             [letter drawAtPoint:drawPoint withAttributes:attributes];
             
@@ -77,7 +81,9 @@
             CGContextSetLineWidth(ctx, _borderWidth);
             [letter drawAtPoint:drawPoint withAttributes:attributes];
             
-            
+            if (![letter isEqualToString:@" "]){
+                colorIdx++;
+            }
         }
     }
 }

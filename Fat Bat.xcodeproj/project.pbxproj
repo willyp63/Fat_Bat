@@ -13,8 +13,6 @@
 		4605694C1C208B2900D60E0E /* LevelSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4605694A1C208B2900D60E0E /* LevelSelectViewController.m */; };
 		460569551C20B46D00D60E0E /* TitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 460569541C20B46D00D60E0E /* TitleViewController.m */; };
 		4612371A1C251B4700E09FDD /* MyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 461237191C251B4700E09FDD /* MyButton.m */; };
-		4612371D1C25D5C900E09FDD /* LevelCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4612371C1C25D5C900E09FDD /* LevelCreationViewController.m */; };
-		461237201C25FF8900E09FDD /* LevelFileSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4612371F1C25FF8900E09FDD /* LevelFileSelectViewController.m */; };
 		4635C6961C21F42C006CF4D5 /* FinishLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4635C6951C21F42C006CF4D5 /* FinishLineView.m */; };
 		4635C69A1C21F96E006CF4D5 /* StalagmiteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4635C6991C21F96E006CF4D5 /* StalagmiteView.m */; };
 		463EE2021C24F55100824907 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 463EE2011C24F55100824907 /* levels */; };
@@ -45,10 +43,6 @@
 		460569541C20B46D00D60E0E /* TitleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleViewController.m; sourceTree = "<group>"; };
 		461237181C251B4700E09FDD /* MyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyButton.h; sourceTree = "<group>"; };
 		461237191C251B4700E09FDD /* MyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyButton.m; sourceTree = "<group>"; };
-		4612371B1C25D5C900E09FDD /* LevelCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelCreationViewController.h; sourceTree = "<group>"; };
-		4612371C1C25D5C900E09FDD /* LevelCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelCreationViewController.m; sourceTree = "<group>"; };
-		4612371E1C25FF8900E09FDD /* LevelFileSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelFileSelectViewController.h; sourceTree = "<group>"; };
-		4612371F1C25FF8900E09FDD /* LevelFileSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelFileSelectViewController.m; sourceTree = "<group>"; };
 		4635C6941C21F42C006CF4D5 /* FinishLineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinishLineView.h; sourceTree = "<group>"; };
 		4635C6951C21F42C006CF4D5 /* FinishLineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinishLineView.m; sourceTree = "<group>"; };
 		4635C6981C21F96E006CF4D5 /* StalagmiteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StalagmiteView.h; sourceTree = "<group>"; };
@@ -99,7 +93,6 @@
 				4605694A1C208B2900D60E0E /* LevelSelectViewController.m */,
 				4674F6061C1CB04D00701996 /* GameViewController.h */,
 				4674F6071C1CB04D00701996 /* GameViewController.m */,
-				468B99BF1C442D1600272FFD /* level creation vcs */,
 			);
 			name = VCs;
 			sourceTree = "<group>";
@@ -209,17 +202,6 @@
 			name = "Resource Management";
 			sourceTree = "<group>";
 		};
-		468B99BF1C442D1600272FFD /* level creation vcs */ = {
-			isa = PBXGroup;
-			children = (
-				4612371E1C25FF8900E09FDD /* LevelFileSelectViewController.h */,
-				4612371F1C25FF8900E09FDD /* LevelFileSelectViewController.m */,
-				4612371B1C25D5C900E09FDD /* LevelCreationViewController.h */,
-				4612371C1C25D5C900E09FDD /* LevelCreationViewController.m */,
-			);
-			name = "level creation vcs";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -293,7 +275,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4612371D1C25D5C900E09FDD /* LevelCreationViewController.m in Sources */,
 				4674F6081C1CB04D00701996 /* GameViewController.m in Sources */,
 				460569551C20B46D00D60E0E /* TitleViewController.m in Sources */,
 				467145E11C3B1030008001DC /* ShapeMarkerView.m in Sources */,
@@ -306,7 +287,6 @@
 				467145DB1C319A0A008001DC /* ProgressBarView.m in Sources */,
 				4605693B1C1DEF9000D60E0E /* GameObjectModel.m in Sources */,
 				463EE20E1C24FA1A00824907 /* LevelFileHandler.m in Sources */,
-				461237201C25FF8900E09FDD /* LevelFileSelectViewController.m in Sources */,
 				4605693E1C1E058000D60E0E /* BatView.m in Sources */,
 				4674F6021C1CB04D00701996 /* main.m in Sources */,
 				4605694C1C208B2900D60E0E /* LevelSelectViewController.m in Sources */,

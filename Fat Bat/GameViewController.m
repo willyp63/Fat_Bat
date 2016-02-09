@@ -135,10 +135,9 @@
     
     
     //PAUSE BUTTON
-    CGRect pauseButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH*scaleY - GAME_BUTTON_OFFSET*scaleY, GAME_BUTTON_OFFSET*scaleY + statusBarHeight, GAME_BUTTON_WIDTH*scaleY, GAME_BUTTON_HEIGHT*scaleY);
+    CGRect pauseButtonFrame = CGRectMake(screenSize.width - GAME_BUTTON_WIDTH*2.0*scaleY - GAME_BUTTON_OFFSET*scaleY, GAME_BUTTON_OFFSET*scaleY + statusBarHeight, GAME_BUTTON_WIDTH*2.0*scaleY, GAME_BUTTON_HEIGHT*scaleY);
     
-    _pauseButton = [[MyButton alloc] initWithFrame:pauseButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"II" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
-    [_pauseButton setIsToggleButton:YES];
+    _pauseButton = [[MyButton alloc] initWithFrame:pauseButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"PAUSE" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY/2.0] responder:self];
     [self.view addSubview:_pauseButton];
     
     
@@ -177,90 +176,102 @@
 
 -(void)buttonPressed:(MyButton *)button{
     //PAUSE BUTTON PRESSED
-    if ([button.text isEqualToString:@"II"]) {
+    if ([button.textLabel.text isEqualToString:@"PAUSE"]) {
         //pause game
         [self pause];
     }
+    //RESUME BUTTON PRESSED
+    else if ([button.textLabel.text isEqualToString:@"PLAY"]) {
+        //quit game
+        [self unpause];
+    }
     //QUIT BUTTON PRESSED
-    else if ([button.text isEqualToString:@"X"]) {
+    else if ([button.textLabel.text isEqualToString:@"EXIT"]) {
         //quit game
         [self quitGame];
     }
     //MUSIC BUTTON PRESSED
-    else if ([button.text isEqualToString:@"MUS"]) {
+    else if ([button.textLabel.text isEqualToString:@"MUSIC"]) {
         [_audioHandler toggleMusic];
     }
     //SOUND BUTTON PRESSED
-    else if ([button.text isEqualToString:@"SFX"]) {
+    else if ([button.textLabel.text isEqualToString:@"SOUND"]) {
         [_audioHandler toggleSound];
     }
 }
 
 -(void)pause{
-    //if game is paused
-    if (_model.state == PAUSED) {
-        //set state to in progress
-        [_model setState:IN_PROGRESS];
-        
-        //clear hold button's bg
-        _holdButton.backgroundColor = [UIColor clearColor];
-        
-        //start update timer
-        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
-        
-        //play music
-        [_audioHandler tryPlayMusic];
-        
-        
-        //remove menu
-        [_musicButton removeFromSuperview];
-        [_soundButton removeFromSuperview];
-        [_quitButton removeFromSuperview];
-    }else{
-        //set state to paused
-        [_model setState:PAUSED];
-        
-        //set opaque layer over cave views
-        _holdButton.backgroundColor = [UIColor colorWithRed:OPAQUE_RED green:OPAQUE_GREEN blue:OPAQUE_BLUE alpha:OPAQUE_ALPHA];
-        
-        //stop update timer
-        [_updateTimer invalidate];
-        
-        
-        //stop music
-        [_audioHandler pauseMusic];
-        
-        
-        //get screen deminsions and ui scales
-        CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        CGFloat statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
-        CGFloat scaleY = screenSize.height / IPHONE_6S_SCREEN_HEIGHT;
-        
-        //MENU FRAME
-        CGRect menuFrame = CGRectMake((screenSize.width - GAME_BUTTON_WIDTH*scaleY*6.0 - GAME_BUTTON_OFFSET*scaleY*4.0)/2.0, (screenSize.height - GAME_BUTTON_HEIGHT*scaleY*2.0)/2.0 + statusBarHeight/2.0, GAME_BUTTON_WIDTH*scaleY*6.0 + GAME_BUTTON_OFFSET*scaleY*4.0, GAME_BUTTON_HEIGHT*scaleY*2.0);
-        
-        //ADD MUSIC BUTTON
-        CGRect musicButtonFrame = CGRectMake(menuFrame.origin.x, menuFrame.origin.y, GAME_BUTTON_WIDTH*scaleY*2.0, GAME_BUTTON_HEIGHT*scaleY*2.0);
-        
-        _musicButton = [[MyButton alloc] initWithFrame:musicButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"MUS" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
-        [_musicButton setIsToggleButton:YES];
-        [_musicButton setToggle:!_audioHandler.musicToggle];
-        [self.view addSubview:_musicButton];
-        
-        //ADD SOUND BUTTON
-        CGRect soundButtonFrame = CGRectMake(menuFrame.origin.x + GAME_BUTTON_WIDTH*scaleY*2.0 + GAME_BUTTON_OFFSET*scaleY*2.0, menuFrame.origin.y, GAME_BUTTON_WIDTH*scaleY*2.0, GAME_BUTTON_HEIGHT*scaleY*2.0);
-        
-        _soundButton = [[MyButton alloc] initWithFrame:soundButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"SFX" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
-        [_soundButton setIsToggleButton:YES];
-        [_soundButton setToggle:!_audioHandler.soundToggle];
-        [self.view addSubview:_soundButton];
-        
-        //ADD QUIT BUTTON
-        CGRect quitButtonFrame = CGRectMake(menuFrame.origin.x + GAME_BUTTON_WIDTH*scaleY*4.0 + GAME_BUTTON_OFFSET*scaleY*4.0, menuFrame.origin.y, GAME_BUTTON_WIDTH*scaleY*2.0, GAME_BUTTON_HEIGHT*scaleY*2.0);
-        
-        _quitButton = [[MyButton alloc] initWithFrame:quitButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"X" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
-        [self.view addSubview:_quitButton];
-    }
+    //set state to paused
+    [_model setState:PAUSED];
+    
+    //change button text
+    _pauseButton.textLabel.text = @"PLAY";
+    [_pauseButton.textLabel setNeedsDisplay];
+    
+    //set opaque layer over cave views
+    _holdButton.backgroundColor = [UIColor colorWithRed:OPAQUE_RED green:OPAQUE_GREEN blue:OPAQUE_BLUE alpha:OPAQUE_ALPHA];
+    
+    //stop update timer
+    [_updateTimer invalidate];
+    
+    
+    //stop music
+    [_audioHandler pauseMusic];
+    
+    
+    //get screen deminsions and ui scales
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGFloat statusBarHeight = [[UIApplication sharedApplication] statusBarFrame].size.height;
+    CGFloat scaleY = screenSize.height / IPHONE_6S_SCREEN_HEIGHT;
+    
+    //MENU FRAME
+    CGRect menuFrame = CGRectMake((screenSize.width - GAME_BUTTON_WIDTH*scaleY*51.0/5.0 - GAME_BUTTON_OFFSET*scaleY*4.0)/2.0, (screenSize.height - GAME_BUTTON_HEIGHT*scaleY*8.0/5.0)/2.0 + statusBarHeight/2.0, GAME_BUTTON_WIDTH*scaleY*51.0/5.0 + GAME_BUTTON_OFFSET*scaleY*4.0, GAME_BUTTON_HEIGHT*scaleY*8.0/5.0);
+    
+    //ADD MUSIC BUTTON
+    CGRect musicButtonFrame = CGRectMake(menuFrame.origin.x, menuFrame.origin.y, GAME_BUTTON_WIDTH*scaleY*17.0/5.0, GAME_BUTTON_HEIGHT*scaleY*8.0/5.0);
+    
+    _musicButton = [[MyButton alloc] initWithFrame:musicButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"MUSIC" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
+    [_musicButton setIsToggleButton:YES];
+    [_musicButton setToggle:!_audioHandler.musicToggle];
+    [self.view addSubview:_musicButton];
+    
+    //ADD SOUND BUTTON
+    CGRect soundButtonFrame = CGRectMake(musicButtonFrame.origin.x + musicButtonFrame.size.width + GAME_BUTTON_OFFSET*scaleY*2.0, menuFrame.origin.y, musicButtonFrame.size.width, musicButtonFrame.size.height);
+    
+    _soundButton = [[MyButton alloc] initWithFrame:soundButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"SOUND" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
+    [_soundButton setIsToggleButton:YES];
+    [_soundButton setToggle:!_audioHandler.soundToggle];
+    [self.view addSubview:_soundButton];
+    
+    //ADD QUIT BUTTON
+    CGRect quitButtonFrame = CGRectMake(soundButtonFrame.origin.x + soundButtonFrame.size.width + GAME_BUTTON_OFFSET*scaleY*2.0, menuFrame.origin.y, musicButtonFrame.size.width, musicButtonFrame.size.height);
+    
+    _quitButton = [[MyButton alloc] initWithFrame:quitButtonFrame cornerRadius:BUTTON_CORNER_RADIUS*scaleY borderWidth:BORDER_WIDTH*scaleY color:[UIColor whiteColor] text:@"EXIT" font:[UIFont fontWithName:FONT_NAME size:FONT_SIZE*scaleY] responder:self];
+    [self.view addSubview:_quitButton];
+}
+
+-(void)unpause{
+    //set state to in progress
+    [_model setState:IN_PROGRESS];
+    
+    //change button text
+    _pauseButton.textLabel.text = @"PAUSE";
+    [_pauseButton.textLabel setNeedsDisplay];
+    
+    //clear hold button's bg
+    _holdButton.backgroundColor = [UIColor clearColor];
+    
+    //start update timer
+    _updateTimer = [NSTimer scheduledTimerWithTimeInterval:UPDATE_TIME_INTERVAL target:self selector:@selector(update) userInfo:Nil repeats:NO];
+    
+    //play music
+    [_audioHandler tryPlayMusic];
+    
+    
+    //remove menu
+    [_musicButton removeFromSuperview];
+    [_soundButton removeFromSuperview];
+    [_quitButton removeFromSuperview];
 }
 
 
@@ -327,7 +338,7 @@
         [_audioHandler stopMusic];
         
         //init alert view and present it
-        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"Congrats!" message:@"cave complete" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"Congrats!" message:@"cavern complete" preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             //dismiss alert view
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -440,7 +451,7 @@
             stalagmiteView.frame = stalagmiteObject.frame;
         }completion:NULL];
     }
-    
+
     
     //update finish line view
     [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{

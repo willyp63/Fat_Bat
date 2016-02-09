@@ -24,6 +24,11 @@
     return [NSString stringWithContentsOfFile:docPath encoding:NSUTF8StringEncoding error:nil];
 }
 
++(void)writeLevelsFile:(NSString *)string{
+    //write to documents path
+    [string writeToFile:[self documentsPathForFileName:LEVELS_FILE_NAME] atomically:NO encoding:NSUTF8StringEncoding error:nil];
+}
+
 +(NSString *)levelWithName:(NSString *)levelName{
     //get documents path
     NSString *docPath = [self documentsPathForFileName:levelName];
@@ -31,7 +36,7 @@
     //check if documents file exists
     if (![[NSFileManager defaultManager] fileExistsAtPath:docPath]) {
         NSLog(@"No level file found with name %@", levelName);
-        exit(1);
+        //exit(1);
     }
     
     //return contents of file
@@ -46,11 +51,18 @@
     //init c array
     NSString *lines[allLines.count];
     int numLines = 0;
+    BOOL commentBlock = NO;
     
     //fill c array with all valid lines
     for (int i = 0; i < allLines.count; i++) {
         //check if line doesnt begins with comment prefix and is not a blank line
-        if ([allLines[i] length] > 0 && ![allLines[i] hasPrefix:COMMENT_LINE_PREFIX]) {
+        if (commentBlock) {
+            if ([allLines[i] hasPrefix:@"*/"]) {
+                commentBlock = NO;
+            }
+        }else if([allLines[i] hasPrefix:@"/*"]){
+            commentBlock = YES;
+        }else if ([allLines[i] length] > 0 && ![allLines[i] hasPrefix:COMMENT_LINE_PREFIX]) {
             //add line to c array
             lines[numLines] = allLines[i];
             numLines++;
@@ -69,14 +81,14 @@
     
     //get lines
     NSArray *lines = [string componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    for (int i = 0; i < lines.count; i++) {
+    for (int i = 1; i < lines.count; i++) {
         //seperate into words
         NSArray *words = [lines[i] componentsSeparatedByString:@" "];
         
         //check for correct number of arguments on line
         if (words.count != 2) {
             NSLog(@"levels file has the wrong number of arguments on line %d", i);
-            exit(1);
+            //exit(1);
         }
         
         //get level name from first argument
@@ -104,7 +116,7 @@
         //check for correct number of arguments on line
         if (words.count != 2) {
             NSLog(@"levels file has the wrong number of arguments on line %d", i);
-            exit(1);
+            //exit(1);
         }
         
         //get line name from first argument
@@ -177,7 +189,7 @@
                 float arg1 = [words[0] floatValue];
                 
                 //check arg1
-                if(arg1 < 0 || arg1 > 2){
+                if(arg1 < 1 || arg1 > 3){
                     return @"invalid argument on line 3";
                 }
             }

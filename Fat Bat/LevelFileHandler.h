@@ -14,6 +14,7 @@
 
 
 +(NSString *)levelsFile;
++(void)writeLevelsFile:(NSString *)string;
 +(NSString *)levelWithName:(NSString *)levelName;
 
 +(NSArray *)getLinesFromLevelFile:(NSString *)string;

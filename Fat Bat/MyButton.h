@@ -23,8 +23,8 @@
 @property CGFloat cornerRadius;
 @property CGFloat borderWidth;
 @property UIColor *color;
-@property NSString *text;
 @property UIFont *font;
+@property UILabel *textLabel;
 
 @property BOOL isToggleButton;
 @property BOOL toggleState;

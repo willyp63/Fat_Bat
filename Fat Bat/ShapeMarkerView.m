@@ -29,18 +29,8 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     switch (_shape) {
-        case GREEN_CIRCLE:{
-            CGContextMoveToPoint(ctx, _borderWidth/2.0, _borderWidth/2.0);
-            CGContextAddLineToPoint(ctx, self.bounds.size.width - _borderWidth/2.0, _borderWidth/2.0);
-            CGContextAddLineToPoint(ctx, self.bounds.size.width - _borderWidth/2.0, self.bounds.size.height - _borderWidth/2.0);
-            CGContextAddLineToPoint(ctx, _borderWidth/2.0, self.bounds.size.height - _borderWidth/2.0);
-            CGContextClosePath(ctx);
-            
-            CGContextSetStrokeColorWithColor(ctx, [UIColor blackColor].CGColor);
-            CGContextSetFillColorWithColor(ctx, [UIColor greenColor].CGColor);
-            CGContextSetLineWidth(ctx, _borderWidth);
-            CGContextDrawPath(ctx, kCGPathFillStroke);
-        }break;
+        case GREEN_CIRCLE:
+            break;
             
         case BLUE_SQUARE:
             

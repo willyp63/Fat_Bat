@@ -28,8 +28,8 @@
 #define GAME_BUTTON_WIDTH 40.0
 #define GAME_BUTTON_HEIGHT 40.0
 
-#define PLAY_BUTTON_WIDTH 160.0
-#define PLAY_BUTTON_HEIGHT 80.0
+#define PLAY_BUTTON_WIDTH 128.0
+#define PLAY_BUTTON_HEIGHT 64.0
 
 
 //progress bar
@@ -47,7 +47,7 @@
 //fonts
 #define FONT_NAME @"ChalkboardSE-Bold"
 #define FONT_SIZE 32.0
-#define TABLE_TITLE_FONT_SIZE 24.0
+#define TABLE_TITLE_FONT_SIZE 20.0
 #define TITLE_FONT_SIZE 128.0
 #define SUBTITLE_FONT_SIZE 40.0
 
