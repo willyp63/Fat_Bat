@@ -152,7 +152,7 @@
     
     if ([_levelName isEqualToString:@"Easy_Beginning"]) {
         //init synnopisis alert view and present it
-        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"Welcome to Fat Bat!" message:@"Reach the finish by avoiding stalagmites. Tap and hold to dive. Release to resume flying." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController * alert=   [UIAlertController alertControllerWithTitle:@"Welcome to the Colored Caverns!" message:@"Reach the finish by avoiding stalagmites. Tap and hold to dive. Release to resume flying." preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             //dismiss alert view
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -417,8 +417,9 @@
         [_audioHandler playSound:0];
         
         //calc animation times
-        CGFloat timeToBounceFrame = _model.timeToBounce * UPDATE_TIME_INTERVAL;
-        CGFloat timeToNewFrame = UPDATE_TIME_INTERVAL - timeToBounceFrame;
+        CFTimeInterval updateTime = UPDATE_TIME_INTERVAL - CACurrentMediaTime() + startTime;
+        CGFloat timeToBounceFrame = _model.timeToBounce * updateTime;
+        CGFloat timeToNewFrame = updateTime - timeToBounceFrame;
         
         //make bounce rect
         CGRect bounceFrame = CGRectMake(_model.bat.frame.origin.x, _model.bounceFrameY, _model.bat.frame.size.width, _model.bat.frame.size.height);
@@ -435,7 +436,7 @@
     //did not bounce
     else{
         //animate bat moving to new frame
-        [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:(UPDATE_TIME_INTERVAL - CACurrentMediaTime() + startTime) delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
             _batView.frame = _model.bat.frame;
         }completion:NULL];
     }
@@ -447,14 +448,14 @@
         GameObjectModel *stalagmiteObject = _model.stalagmite[i];
         
         //move to new frame
-        [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:(UPDATE_TIME_INTERVAL - CACurrentMediaTime() + startTime) delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
             stalagmiteView.frame = stalagmiteObject.frame;
         }completion:NULL];
     }
 
     
     //update finish line view
-    [UIView animateWithDuration:UPDATE_TIME_INTERVAL delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:(UPDATE_TIME_INTERVAL - CACurrentMediaTime() + startTime) delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         _finishLineView.frame = CGRectMake(_model.finishLine, _model.caveFrame.origin.y + BORDER_WIDTH*caveScale*2.0, _model.subDivisionSize, _model.caveFrame.size.height - BORDER_WIDTH*caveScale*4.0);
     }completion:NULL];
     
@@ -465,13 +466,10 @@
     [_progressBar setProgress:progress];
 
     
-    //get elapsed time
-    CFTimeInterval elapsedTime = CACurrentMediaTime() - startTime;
-    
     //if not paused
     if (_model.state != PAUSED) {
         //start update timer
-        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:(UPDATE_TIME_INTERVAL - elapsedTime) target:self selector:@selector(update) userInfo:Nil repeats:NO];
+        _updateTimer = [NSTimer scheduledTimerWithTimeInterval:((UPDATE_TIME_INTERVAL - CACurrentMediaTime() + startTime)) target:self selector:@selector(update) userInfo:Nil repeats:NO];
     }
 }
 
