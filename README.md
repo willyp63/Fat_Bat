@@ -18,5 +18,9 @@ Tap and hold to dive. Release to resume flying.
 
 Bounce your way through 15 unique and challenging caverns!
 
-![finish_line]
-[finish_line]: ./docs/screenshots/finish-line.jpeg
+![screenshot]
+[screenshot]: ./docs/screenshots/screenshot.jpeg
+![screenshot2]
+[screenshot2]: ./docs/screenshots/screenshot2.png
+![screenshot1]
+[screenshot1]: ./docs/screenshots/screenshot1.png
